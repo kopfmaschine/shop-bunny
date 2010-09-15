@@ -24,3 +24,9 @@ Coupon.blueprint(:euro10) do
   discount_credit 10.0  
   title "10€ abzug"
 end
+
+Coupon.blueprint(:daterange) do
+  valid_from Time.local(2010,9,10)
+  valid_until Time.local(2010,9,20)
+  title "Datumscoupon"
+end

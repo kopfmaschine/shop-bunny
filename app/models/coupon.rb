@@ -4,4 +4,9 @@ class Coupon < ActiveRecord::Base
 
   validates_presence_of :code
   validates_presence_of :title
+  
+  
+  def expired?
+    !Time.now.between?(self.valid_from, self.valid_until)
+  end
 end
