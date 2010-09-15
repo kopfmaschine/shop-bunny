@@ -3,8 +3,6 @@ class Cart < ActiveRecord::Base
   has_many :coupon_uses
   has_many :coupons, :through => :coupon_uses
   
-  validates_presence_of :owner_id
-  
   class << self
     attr_accessor :shipping_cost_calculator
   end

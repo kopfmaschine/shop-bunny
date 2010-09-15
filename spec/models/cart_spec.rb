@@ -2,7 +2,6 @@
 
 describe Cart do
   it { should have_many :cart_items}
-  it { should validate_presence_of :owner_id }
   
   context "A Cart" do
     before(:each) do
