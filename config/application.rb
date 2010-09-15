@@ -7,6 +7,9 @@ require 'rails/all'
 Bundler.require(:default, Rails.env) if defined?(Bundler)
 
 module ShopBunny
+  # TODO move this into lib/shop_bunny.rb this becomes a gem!
+  mattr_accessor :shipping_cost_calculator
+  
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers

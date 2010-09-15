@@ -3,10 +3,6 @@ class Cart < ActiveRecord::Base
   has_many :coupon_uses
   has_many :coupons, :through => :coupon_uses
   
-  class << self
-    attr_accessor :shipping_cost_calculator
-  end
-  
   def items
     self.cart_items
   end
@@ -17,7 +13,7 @@ class Cart < ActiveRecord::Base
   
   def shipping_costs
     return 0 if coupons.any?(&:removes_shipping_cost)
-    Cart.shipping_cost_calculator.costs_for(self)
+    shipping_cost_calculator.costs_for(self)
   end
 
   # Calculates the sum of all cart_items, excluding the coupons discount!
@@ -55,7 +51,6 @@ class Cart < ActiveRecord::Base
     cart_item = self.cart_items.find_by_item_id(item)
     if cart_item
       cart_item.quantity -= options[:quantity]
-      cart_item.quantity = 0 if cart_item.quantity < 0
       cart_item.save!
       self.reload
     end
@@ -71,5 +66,9 @@ class Cart < ActiveRecord::Base
       self.reload
     end
     cart_item
+  end
+  
+  def shipping_cost_calculator
+    ShopBunny.shipping_cost_calculator
   end
 end

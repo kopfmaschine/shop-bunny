@@ -1,1 +1,1 @@
-Cart.shipping_cost_calculator = DefaultShippingCostCalculator
+ShopBunny.shipping_cost_calculator = DefaultShippingCostCalculator
