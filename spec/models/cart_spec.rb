@@ -64,7 +64,6 @@ describe Cart do
         
         it "should reduce items sum by 10" do
           @cart.coupons << Coupon.make(:euro10)
-          puts @cart.coupons.first.inspect
           @cart.total.should be_close(@cart.item_sum - 10, 0.01)
         end
       end
