@@ -1,12 +1,12 @@
 class CartItem < ActiveRecord::Base
   belongs_to :cart
-  has_one :article
+  belongs_to :item
+  
   validates_presence_of :cart_id
-  validates_presence_of :article_id
+  validates_presence_of :item_id
   validates_numericality_of :quantity
   
   before_validation :set_default_quantity
-
 
 
   private

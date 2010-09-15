@@ -12,38 +12,49 @@
   end
 
   def item_sum
-    self.cart_items.inject(0) {|sum,e| sum += e.quantity*e.quantity.article.price}
+    self.cart_items.inject(0) {|sum,e| sum += e.quantity*e.item.price}
   end
 
   #increases the quantity of an article. creates a new one if it doesn't exist
-  def add(options)
-    article = self.cart_items.find_or_create_by_article_id(options[:article_id])
-    article.quantity += options[:quantity]
-    article.save!
+  def add_item(item,options = {})
+    options[:quantity] ||= 1
+    cart_item = self.cart_items.find_or_create_by_item_id(item.id)
+    cart_item.quantity += options[:quantity]
+    cart_item.save!
     self.reload
-    article
+    cart_item
   end
+
+#  def add_coupon(coupon)
+#    coupon_item = self.coupon_items.find_or_create_by_coupon(coupon)
+#    coupon_item.quantity += options[:quantity]
+#    coupon_item.save!
+#    self.reload
+#    coupon_item
+#  end
+
+
   
   #removes a quantity of an article specified by :article_id, returns nil if no article has been found
-  def remove(options)
-    article = self.cart_items.find_by_article_id(options[:article_id])
-    if article
-      article.quantity -= options[:quantity]
-      article.quantity = 0 if article.quantity < 0
-      article.save!
+  def remove_item(item,options)
+    cart_item = self.cart_items.find_by_item_id(item)
+    if cart_item
+      cart_item.quantity -= options[:quantity]
+      cart_item.quantity = 0 if cart_item.quantity < 0
+      cart_item.save!
       self.reload
     end
-    article
+    cart_item
   end
 
   #sets the quantity of an article specified by :article_id, returns nil if no article has been found
-  def set(options)
-     article = self.cart_items.find_by_article_id(options[:article_id])
-    if article
-      article.quantity = options[:quantity]
-      article.save!
+  def update_item(item,options)
+     cart_item = self.cart_items.find_by_item_id(item)
+    if cart_item
+      cart_item.quantity = options[:quantity]
+      cart_item.save!
       self.reload
     end
-    article
+    cart_item
   end
 end
