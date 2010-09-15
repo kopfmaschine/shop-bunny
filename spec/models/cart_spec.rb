@@ -66,6 +66,12 @@ describe Cart do
           @cart.coupons << Coupon.make(:euro10)
           @cart.total.should be_close(@cart.item_sum - 10, 0.01)
         end
+        
+        it "should be no shipping costs with a coupon" do
+          @cart.shipping_costs.should be_close(8.90,0.01) 
+          @cart.coupons << Coupon.make(:shipping)
+          @cart.shipping_costs.should be_close(0,0.01) 
+        end
       end
     end
   end

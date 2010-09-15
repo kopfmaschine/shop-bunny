@@ -5,12 +5,21 @@ class Cart < ActiveRecord::Base
   
   validates_presence_of :owner_id
   
+  class << self
+    attr_accessor :shipping_cost_calculator
+  end
+  
   def items
     self.cart_items
   end
   
   def item_count
     self.cart_items.inject(0) {|sum,e| sum += e.quantity}
+  end
+  
+  def shipping_costs
+    return 0 if coupons.any?(&:removes_shipping_cost)
+    Cart.shipping_cost_calculator.costs_for(self)
   end
 
   # Calculates the sum of all cart_items, excluding the coupons discount!
@@ -27,7 +36,9 @@ class Cart < ActiveRecord::Base
 
     sum -= absolute_discount
     sum *= relative_discount
-    sum
+    
+    sum + shipping_costs
+    sum 
   end
   
   #increases the quantity of an article. creates a new one if it doesn't exist
