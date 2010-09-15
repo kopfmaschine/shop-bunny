@@ -1,5 +1,7 @@
-    class Cart < ActiveRecord::Base
+class Cart < ActiveRecord::Base
   has_many :cart_items
+  has_many :coupon_uses
+  has_many :coupons, :through => :coupon_uses
   
   validates_presence_of :owner_id
   
@@ -11,10 +13,23 @@
     self.cart_items.inject(0) {|sum,e| sum += e.quantity}
   end
 
+  # Calculates the sum of all cart_items, excluding the coupons discount!
   def item_sum
     self.cart_items.inject(0) {|sum,e| sum += e.quantity*e.item.price}
   end
 
+  # Calculates the total sum and applies the coupons discount! 
+  def total
+    sum = item_sum
+
+    absolute_discount = coupons.sum(:discount_credit)
+    relative_discount = coupons.inject(1) {|s,coupon| s * coupon.discount_percentage }
+
+    sum -= absolute_discount
+    sum *= relative_discount
+    sum
+  end
+  
   #increases the quantity of an article. creates a new one if it doesn't exist
   def add_item(item,options = {})
     options[:quantity] ||= 1

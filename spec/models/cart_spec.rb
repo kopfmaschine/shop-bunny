@@ -55,6 +55,19 @@ describe Cart do
       it "should be able to calculate the sum" do
         @cart.item_sum.should be_close(10*10.0+2*20.0+4*30.3,0.01)
       end
+      
+      context "and coupons" do
+        it "should calculate the sum with a 20% off coupon" do
+          @cart.coupons << Coupon.make(:percent20off)
+          @cart.total.should be_close(@cart.item_sum*0.8, 0.01)
+        end
+        
+        it "should reduce items sum by 10" do
+          @cart.coupons << Coupon.make(:euro10)
+          puts @cart.coupons.first.inspect
+          @cart.total.should be_close(@cart.item_sum - 10, 0.01)
+        end
+      end
     end
   end
 end
