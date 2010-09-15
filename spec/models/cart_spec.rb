@@ -34,7 +34,7 @@ describe Cart do
       end
 
       it "should be able to remove articles" do
-        proc {@cart.remove_item(@article1, :quantity => 1)}.should change(@cart, :item_count).by(-1)
+        proc {@cart.remove_item(@article1)}.should change(@cart, :item_count).by(-1)
         proc {@cart.remove_item(@article1, :quantity => 100)}.should change(@cart, :item_count).to(0)
       end
 
