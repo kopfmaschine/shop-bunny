@@ -24,16 +24,6 @@
     self.reload
     cart_item
   end
-
-#  def add_coupon(coupon)
-#    coupon_item = self.coupon_items.find_or_create_by_coupon(coupon)
-#    coupon_item.quantity += options[:quantity]
-#    coupon_item.save!
-#    self.reload
-#    coupon_item
-#  end
-
-
   
   #removes a quantity of an article specified by :article_id, returns nil if no article has been found
   def remove_item(item,options)
