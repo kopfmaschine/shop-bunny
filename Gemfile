@@ -9,8 +9,7 @@ gem 'sqlite3-ruby', :require => 'sqlite3'
 
 group :development, :test do
   gem "rails3-generators"
-  gem "capybara"
-  gem "capybara-envjs"
+  gem 'capybara'
   gem "autotest"
   gem 'shoulda'
   gem "rspec-rails", ">= 2.0.0.beta.19"
