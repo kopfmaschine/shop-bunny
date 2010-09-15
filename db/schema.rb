@@ -35,10 +35,10 @@ ActiveRecord::Schema.define(:version => 20100915093821) do
   end
 
   create_table "coupons", :force => true do |t|
-    t.boolean  "removes_tax"
-    t.float    "discount_percentage"
-    t.float    "discount_credit"
-    t.boolean  "removes_shipping_cost"
+    t.boolean  "removes_tax",           :default => false
+    t.float    "discount_percentage",   :default => 1.0
+    t.float    "discount_credit",       :default => 0.0
+    t.boolean  "removes_shipping_cost", :default => false
     t.integer  "bonus_article_id"
     t.date     "valid_from"
     t.date     "valid_until"
