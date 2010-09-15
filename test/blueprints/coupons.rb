@@ -1,3 +1,4 @@
+# encoding: utf-8
 Coupon.blueprint do
 #  removes_tax false
   discount_percentage 1.0
