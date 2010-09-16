@@ -3,9 +3,11 @@ class Cart < ActiveRecord::Base
   has_many :cart_items, :dependent => :destroy
   has_many :coupon_uses, :dependent => :destroy
   has_many :coupons, :through => :coupon_uses
+  accepts_nested_attributes_for :cart_items, :allow_destroy => true 
   before_save :update_coupons
-  attr_accessible :coupon_code
+  attr_accessible :coupon_code, :cart_items_attributes
   validate :coupon_code_must_be_valid
+    
   
   def items
     self.cart_items

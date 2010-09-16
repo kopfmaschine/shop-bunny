@@ -50,6 +50,13 @@ describe CartsController do
       assigns[:cart].cart_items.map(&:item).should == [@item2]
       response.should redirect_to(assigns[:cart])
     end
+    
+    it 'should update the quantity of a cart item' do
+      cart_item = @cart.cart_items.first
+      put :update, {:cart => { :cart_items_attributes => [{:id => cart_item.id, :quantity => 42 }]}}, {:cart_id => @cart.id}
+      assigns[:cart].cart_items.first.quantity.should be(42)
+      response.should redirect_to(assigns[:cart])
+    end
   end
   
   it "shoul add correct coupon code" do

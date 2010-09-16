@@ -45,14 +45,14 @@ describe Cart do
 
       it "should be able to set the quantity of an article directly" do
         proc {@cart.update_item(@article1, :quantity => 5)}.should change(@cart, :item_count).to(5)
-      end
+      end    
     end
     
     context "adding coupon codes" do
       it "should show an error when adding an incorrect coupon code" do
         @cart.coupon_code = "incorrectcode"
         @cart.should_not be_valid        
-        @cart.errors.on(:coupon_code).should_not be_nil
+        @cart.errors[:coupon_code].should_not be_nil
       end
     end
     

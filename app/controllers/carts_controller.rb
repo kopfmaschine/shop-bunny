@@ -23,7 +23,8 @@ class CartsController < ApplicationController
     if @cart.errors.any?
       render :action => 'show'
     else
-      respond_with @cart
+      # FIXME Don't know why respond_to @cart does not work properly here
+      redirect_to @cart
     end
   end
   

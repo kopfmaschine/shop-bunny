@@ -8,7 +8,8 @@ class CartItem < ActiveRecord::Base
   
   before_validation :set_default_quantity
   after_update :destroy_if_empty
-
+  # TODO attr_accessible :quantity
+  
 
   private
   

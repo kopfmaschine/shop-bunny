@@ -10,59 +10,65 @@
     <tr>
       <th><%= item.id %></th>
       <th><%= item.price %></th>
-      <th><%= link_to("Add to cart", add_item_cart_path(:item_id => item.id), :method => :put) %></th>
+      <th><%= link_to("Add to cart", add_item_cart_path(:item_id => item.id)) %></th>
     </tr>
     <% end %>
   </table>
 </table>
 
-<h1>Shopping Cart</h1>
-<table>
-  <tr>
-    <th>Item id</th>
-    <th>Item price</th>
-    <th>Item quantity</th>
-  </tr>
-  <% @cart.cart_items.each do |cart_item| %>
-  <tr>
-    <th><%= cart_item.item.id %></th>
-    <th><%= cart_item.item.price %></th>
-    <th><%= cart_item.quantity %></th>
-  </tr>
-  <% end %>
-</table>
-
-<table class="cashpoint">
-  <tr>
-    <td>Sum: <%= @cart.item_sum %></td>
-  </tr>
-  <tr>
-    <td>Shippin costs: <%= @cart.shipping_costs %></td>
-  </tr>
-  <tr>
-    <td>Total: <%= @cart.total %></td>
-  </tr>
-</table>
-
-<h2>Available coupons</h2>
-<ul>
-<% Coupon.limit(10).all.each do |coupon| %>
-  <li><%= coupon.code %></ti>
-<% end %>
-</ul>
-
-<h2>Your coupons</h2>
-<ul>
-<% @cart.coupons.each do |coupon| %>
-  <li><%= coupon.title %></ti>
-<% end %>
-</ul>
 <%= form_for @cart do |f| %>
+  <h1>Shopping Cart</h1>
+  <table>
+    <tr>
+      <th>Item id</th>
+      <th>Item price</th>
+      <th>Item quantity</th>
+    </tr>
+    
+    <%= f.fields_for :cart_items do |i| %>
+      <tr>
+        <td><%= i.object.item.id %></td>
+        <td><%= i.object.item.price %></td>
+        <td><%= i.text_field :quantity %></td>        
+      </tr>
+    <% end %>
+  </table>
+
+  <table class="cashpoint">
+    <tr>
+      <td>Sum: <%= @cart.item_sum %></td>
+    </tr>
+    <tr>
+      <td>Shippin costs: <%= @cart.shipping_costs %></td>
+    </tr>
+    <tr>
+      <td>Total: <%= @cart.total %></td>
+    </tr>
+  </table>
+  
+  <%= f.submit %>
+<% end %>
+
+
+<%= form_for @cart do |f| %>
+  <h1>Available coupons</h2>
+  <ul>
+  <% Coupon.limit(10).all.each do |coupon| %>
+    <li><%= coupon.code %></ti>
+  <% end %>
+  </ul>
+
+  <h2>Your coupons</h2>
+  <ul>
+  <% @cart.coupons.each do |coupon| %>
+    <li><%= coupon.title %></ti>
+  <% end %>
+  </ul>
   <p>
     <%# TODO Show error messages  %>
     <%= @cart.errors if @cart.errors.any? %>
   </p>
   <%= f.label :coupon_code, 'Got a code?' %>
   <%= f.text_field :coupon_code %>
-  <%= f.submit %>
+  <%= f.submit :value => "Add code" %>
 <% end %>
