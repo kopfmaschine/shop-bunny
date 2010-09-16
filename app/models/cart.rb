@@ -1,7 +1,7 @@
 class Cart < ActiveRecord::Base
   attr_accessor :coupon_code
-  has_many :cart_items
-  has_many :coupon_uses
+  has_many :cart_items, :dependent => :destroy
+  has_many :coupon_uses, :dependent => :destroy
   has_many :coupons, :through => :coupon_uses
   before_save :update_coupons
   attr_accessible
