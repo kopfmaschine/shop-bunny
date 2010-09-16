@@ -13,8 +13,12 @@ class CartsController < ApplicationController
     }
     Array(params[:remove_items]).each { |item_id|      
       @cart.remove_item(item_id)
-    }    
-    respond_with @cart
+    }
+    if @cart.errors.any?
+      render :action => 'show'
+    else
+      respond_with @cart
+    end
   end
   
   protected

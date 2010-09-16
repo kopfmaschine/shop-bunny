@@ -48,6 +48,14 @@ describe Cart do
       end
     end
     
+    context "adding coupon codes" do
+      it "should show an error when adding an incorrect coupon code" do
+        @cart.coupon_code = "incorrectcode"
+        @cart.should_not be_valid        
+        @cart.errors.on(:coupon_code).should_not be_nil
+      end
+    end
+    
     context "with mutiple articles" do
       before(:each) do
         @article3 = Item.make(:price => 30.3)

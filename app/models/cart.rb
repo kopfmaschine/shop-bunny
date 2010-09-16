@@ -4,7 +4,8 @@ class Cart < ActiveRecord::Base
   has_many :coupon_uses, :dependent => :destroy
   has_many :coupons, :through => :coupon_uses
   before_save :update_coupons
-  attr_accessible
+  attr_accessible :coupon_code
+  validate :coupon_code_must_be_valid
   
   def items
     self.cart_items
@@ -76,11 +77,22 @@ class Cart < ActiveRecord::Base
   end
   
   private
+  
   def update_coupons
-    Array(@coupon_code).each {|code|
-      # TODO Add Error message for unknown coupon code
+    Array(@coupon_code).each { |code|
       coupon = Coupon.find_by_code(code)
       coupons << coupon if coupon
+    }
+  end
+  
+  def coupon_code_must_be_valid
+    Array(@coupon_code).each { |code|
+      coupon = Coupon.find_by_code(code)
+      if coupon.nil?
+        errors.add(:coupon_code, "is unknown")
+      elsif coupon.expired?
+        errors.add(:coupon_code, "is expired")
+      end
     }
   end
 end

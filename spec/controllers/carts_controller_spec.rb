@@ -55,7 +55,7 @@ describe CartsController do
     end
   end
   
-  it "handles a correct coupon code" do
+  it "shoul add correct coupon code" do
     coupon = Coupon.make(:shipping)
     put :update, :cart => { :coupon_code => coupon.code }
     cart = assigns[:cart]
@@ -63,11 +63,19 @@ describe CartsController do
     response.should redirect_to(assigns[:cart])
   end
   
-  it "handles a incorrect coupon code" do
-    pending
+  it "handles an incorrect coupon code" do
+    coupon = Coupon.make(:shipping)
+    put :update, :cart => { :coupon_code => "incorrectcode" }
+    cart = assigns[:cart]
+    cart.coupons.should_not include(coupon)
+    response.should be_success
   end
   
-  it "handles a expired coupon code" do
-    pending
-  end
+  # it "handles a expired coupon code" do
+  #   coupon = Coupon.make(:shipping)
+  #   put :update, :cart => { :coupon_code => coupon.code }
+  #   cart = assigns[:cart]
+  #   cart.coupons.should_not include(coupon)
+  #   response.should redirect_to(assigns[:cart])    
+  # end
 end
