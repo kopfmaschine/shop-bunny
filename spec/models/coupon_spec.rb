@@ -6,6 +6,10 @@ describe Coupon do
   it {should validate_presence_of :code }
   it {should validate_uniqueness_of :code }
   
+  it "should not be expired by default" do
+    Coupon.make.should_not be_expired
+  end
+  
   it "should be valid within the given range" do
     coupon = Coupon.make(:daterange)
     Time.stubs(:now).returns(Time.local(2010,9,14).to_time)

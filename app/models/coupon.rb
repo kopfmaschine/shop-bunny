@@ -8,6 +8,15 @@ class Coupon < ActiveRecord::Base
   attr_accessible
   
   def expired?
-    !Time.now.between?(self.valid_from, self.valid_until)
+    not_yet_valid? || has_expired?
+  end
+  
+  # FIXME rename?
+  def not_yet_valid?
+    Time.now < self.valid_from if self.valid_from 
+  end
+  
+  def has_expired?
+    Time.now > self.valid_until if self.valid_until 
   end
 end
