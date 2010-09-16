@@ -5,3 +5,15 @@
 #
 #   cities = City.create([{ :name => 'Chicago' }, { :name => 'Copenhagen' }])
 #   Mayor.create(:name => 'Daley', :city => cities.first)
+
+# Dummy data for development
+if Rails.env.development?
+  3.times { |i| Item.create! :price => i }
+  3.times { |i| 
+    c = Coupon.new
+    c.code = "code#{i}"
+    c.title = "10% discount coupon #{i}"
+    c.discount_percentage = 0.9
+    c.save!
+  }
+end

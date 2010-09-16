@@ -1,19 +1,25 @@
 class CartsController < ApplicationController
   respond_to :html
   before_filter :find_cart
+  before_filter :find_item, :only => [:add_item, :remove_item]
     
   def show
   end
   
+  # Add js responds for add_item and remove_item
+  
+  def add_item
+    @cart.add_item(@item) if @item
+    redirect_to @cart
+  end
+  
+  def remove_item
+    @cart.remove_item(@item) if @item
+    redirect_to @cart
+  end
+  
   def update
-    # FIXME Think about API.
     @cart.update_attributes(params[:cart])
-    Array(params[:add_items]).each { |item_id|      
-      @cart.add_item(item_id)
-    }
-    Array(params[:remove_items]).each { |item_id|      
-      @cart.remove_item(item_id)
-    }
     if @cart.errors.any?
       render :action => 'show'
     else
@@ -22,6 +28,10 @@ class CartsController < ApplicationController
   end
   
   protected
+
+  def find_item
+    @item = Item.find(params[:item_id])
+  end
   
   # The default behaviour is to map a Cart to a session variable 'cart_id'.
   # You might want to overwrite this method to authorize a user.

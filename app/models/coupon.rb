@@ -7,6 +7,8 @@ class Coupon < ActiveRecord::Base
   validates_presence_of :title
   attr_accessible
   
+  # TODO Add self destruction when coupon has expired?
+  
   def expired?
     not_yet_valid? || has_expired?
   end

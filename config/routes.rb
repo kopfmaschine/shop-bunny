@@ -1,5 +1,8 @@
 ShopBunny::Application.routes.draw do
-  resource :cart
+  resource :cart do
+    get :add_item
+    get :remove_item
+  end
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

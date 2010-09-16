@@ -23,13 +23,11 @@ describe CartsController do
   end
   
   it "should add an item to a cart" do
-    item1 = Item.make
-    item2 = Item.make
-    
+    item1 = Item.make        
     # Add item…
-    put :update, :add_items => [item1, item2]
+    get :add_item, :item_id => item1
     # FIXME This 'map' sounds weird?
-    assigns[:cart].cart_items.map(&:item).should == [item1, item2]
+    assigns[:cart].cart_items.map(&:item).should == [item1]
     response.should redirect_to(assigns[:cart])
   end
   
@@ -47,7 +45,7 @@ describe CartsController do
     
     it "should remove an item" do
       # Remove item…
-      put :update, {:remove_items => [@item1]}, { :cart_id => @cart.id }
+      get :remove_item, {:item_id => @item1}, { :cart_id => @cart.id }
       # FIXME This 'map' sounds also weird?
       assigns[:cart].cart_items.map(&:item).should == [@item2]
       response.should redirect_to(assigns[:cart])
