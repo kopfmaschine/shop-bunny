@@ -7,12 +7,13 @@ class CartsController < ApplicationController
   
   def update
     # FIXME Think about API.
+    @cart.update_attributes(params[:cart])
     Array(params[:add_items]).each { |item_id|      
       @cart.add_item(item_id)
     }
     Array(params[:remove_items]).each { |item_id|      
       @cart.remove_item(item_id)
-    }
+    }    
     respond_with @cart
   end
   

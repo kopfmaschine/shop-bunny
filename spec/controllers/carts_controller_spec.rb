@@ -46,7 +46,7 @@ describe CartsController do
       assigns[:cart].cart_items.map(&:item).should == [@item1, @item2]
     end
     
-    it "should remove an item" do     
+    it "should remove an item" do
       # Remove item…
       put :update, {:remove_items => [@item1]}, { :cart_id => @cart.id }
       # FIXME This 'map' sounds also weird?
@@ -55,8 +55,12 @@ describe CartsController do
     end
   end
   
-  it "handles a corrent coupon code" do
-    pending
+  it "handles a correct coupon code" do
+    coupon = Coupon.make(:shipping)
+    put :update, :cart => { :coupon_code => coupon.code }
+    cart = assigns[:cart]
+    cart.coupons.should include(coupon)
+    response.should redirect_to(assigns[:cart])
   end
   
   it "handles a incorrect coupon code" do

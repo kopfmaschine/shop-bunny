@@ -1,7 +1,10 @@
 class Cart < ActiveRecord::Base
+  attr_accessor :coupon_code
   has_many :cart_items
   has_many :coupon_uses
   has_many :coupons, :through => :coupon_uses
+  before_save :update_coupons
+  attr_accessible
   
   def items
     self.cart_items
@@ -70,5 +73,14 @@ class Cart < ActiveRecord::Base
   
   def shipping_cost_calculator
     ShopBunny.shipping_cost_calculator
+  end
+  
+  private
+  def update_coupons
+    Array(@coupon_code).each {|code|
+      # TODO Add Error message for unknown coupon code
+      coupon = Coupon.find_by_code(code)
+      coupons << coupon if coupon
+    }
   end
 end

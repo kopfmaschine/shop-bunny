@@ -1,8 +1,10 @@
 require 'spec_helper'
 
 describe Coupon do
+  subject { Coupon.make }  
   it {should validate_presence_of :title }
   it {should validate_presence_of :code }
+  it {should validate_uniqueness_of :code }
   
   it "should be valid within the given range" do
     coupon = Coupon.make(:daterange)
