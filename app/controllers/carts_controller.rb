@@ -6,7 +6,7 @@ class CartsController < ApplicationController
   def show
   end
   
-  # Add js responds for add_item and remove_item
+  # TODO Add js responds for add_item and remove_item
   
   def add_item
     @cart.add_item(@item) if @item
