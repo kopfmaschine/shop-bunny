@@ -22,8 +22,7 @@ describe CartsController do
     response.should be_success
   end
   
-  # FIXME How can we refactor this test and keep it DRY?
-  it "adds and removes items from a cart" do
+  it "should add an item to a cart" do
     item1 = Item.make
     item2 = Item.make
     

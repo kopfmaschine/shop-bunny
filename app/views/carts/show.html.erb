@@ -1,20 +1,45 @@
-<div id="cart">
-  <table class="items">
+<h1>Shop</h1>
+<table>
+  <table>
     <tr>
       <th>Item id</th>
       <th>Item price</th>
+      <th>Action</th>
     </tr>
-  </table>
-
-  <table class="cashpoint">
+    <% Item.limit(10).each do |item| %>
     <tr>
-      <td>Sum: </td>
+      <th><%= item.id %></th>
+      <th><%= item.price %></th>
+      <th><%= link_to("Add to cart", @cart, :method => :put) %></th>
     </tr>
-    <%= @cart.coupons.each do |coupon| %>
-      <td><%= coupon.title %></td>
     <% end %>
-    <tr>
-      <td>Total: <%= @cart.total %></td>
-    </tr>
   </table>
-</div>
+</table>
+
+<h1>Shopping Cart</h1>
+<table>
+  <tr>
+    <th>Item id</th>
+    <th>Item price</th>
+    <th>Item quantity</th>
+  </tr>
+  <% @cart.cart_items.each do |cart_item| %>
+  <tr>
+    <th><%= cart_item.item.id %></th>
+    <th><%= cart_item.item.price %></th>
+    <th><%= cart_item.item.quantity %></th>
+  </tr>
+  <% end %>
+</table>
+
+<table class="cashpoint">
+  <tr>
+    <td>Sum: </td>
+  </tr>
+  <%= @cart.coupons.each do |coupon| %>
+    <td><%= coupon.title %></td>
+  <% end %>
+  <tr>
+    <td>Total: <%= @cart.total %></td>
+  </tr>
+</table>
