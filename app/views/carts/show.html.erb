@@ -1,0 +1,20 @@
+<div id="cart">
+  <table class="items">
+    <tr>
+      <th>Item id</th>
+      <th>Item price</th>
+    </tr>
+  </table>
+
+  <table class="cashpoint">
+    <tr>
+      <td>Sum: </td>
+    </tr>
+    <%= @cart.coupons.each do |coupon| %>
+      <td><%= coupon.title %></td>
+    <% end %>
+    <tr>
+      <td>Total: <%= @cart.total %></td>
+    </tr>
+  </table>
+</div>

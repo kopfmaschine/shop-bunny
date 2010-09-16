@@ -8,9 +8,7 @@ describe Cart do
       @article1 = Item.make(:price => 10.0)
       @article2 = Item.make(:price => 20.0)
       @cart = Cart.make
-    end
-    
-    
+    end    
     
     it "should be able to add articles" do
       proc {@cart.add_item(@article1, :quantity => 1)}.should change(@cart, :item_count).by(1)
@@ -22,7 +20,7 @@ describe Cart do
       proc {@cart.add_item(@article1, :quantity => 3)}.should change(@cart, :item_count).by(3)
       @cart.items.size.should be(2)
       @cart.item_sum.should be_close(60.0,0.01)
-    end
+    end    
     
     it "should be able to set a default quantity with 1" do
       proc {@cart.add_item(@article1)}.should change(@cart, :item_count).by(1)      
@@ -32,10 +30,17 @@ describe Cart do
       before(:each) do
         @cart.add_item(@article1, :quantity => 10)
       end
+      
+      it "should destroy empty cart_items" do
+        @cart.cart_items.first.update_attribute :quantity, 0        
+        @cart.cart_items.should be_empty
+      end
 
       it "should be able to remove articles" do
+        # FIXME DRY?
         proc {@cart.remove_item(@article1)}.should change(@cart, :item_count).by(-1)
         proc {@cart.remove_item(@article1, :quantity => 100)}.should change(@cart, :item_count).to(0)
+        @cart.cart_items.should be_empty
       end
 
       it "should be able to set the quantity of an article directly" do
