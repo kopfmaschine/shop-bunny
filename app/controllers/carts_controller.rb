@@ -10,9 +10,6 @@ class CartsController < ApplicationController
   def add_item
     @cart.add_item(@item) if @item
     respond_with @cart do |format|
-      # We hav to redirect by hand here, because 
-      # url_for(@cart) returns "/cart.x" when cart is a singular resource
-      # (see routes.rb).
       format.html { redirect_to :action => :show }
     end
   end
@@ -31,6 +28,10 @@ class CartsController < ApplicationController
         if @cart.errors.any?
           render 'show' 
         else
+          # We have to redirect by hand here, because 
+          # url_for(@cart) returns "/cart.x" when cart is a singular resource
+          # (see routes.rb). This is a known limitation of Rails.
+          # See https://rails.lighthouseapp.com/projects/8994/tickets/4168
           redirect_to :action => :show 
         end
       }
