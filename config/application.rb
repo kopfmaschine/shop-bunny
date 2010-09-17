@@ -6,18 +6,18 @@ require 'rails/all'
 # you've limited to :test, :development, or :production.
 Bundler.require(:default, Rails.env) if defined?(Bundler)
 
-module ShopBunny
-  # TODO move this into lib/shop_bunny.rb this becomes a gem!
-  mattr_accessor :shipping_cost_calculator
-  
+module ShopBunny  
   class Application < Rails::Application
+    require File.expand_path('../../lib/shop_bunny', __FILE__)
+    
+    config.secret_token = '5c1a3c2532aea3d110a737fac43f765b90782d1402e6f4d574dad1c9758303c70c32f3bdd621d09ff4c8da144f3e3efa80008d89a0dc621ca86201ff8c26f1dd'
+    
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
 
     # Custom directories with classes and modules you want to be autoloadable.
-    config.autoload_paths += %W(#{config.root}/lib)
-
+    config.autoload_paths += %W(#{config.root}/lib)      
 
     # Only load the plugins named here, in the order given (default is alphabetical).
     # :all can be used as a placeholder for all plugins not explicitly named.

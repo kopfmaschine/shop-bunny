@@ -1,6 +1,6 @@
 class CartItem < ActiveRecord::Base
   belongs_to :cart
-  belongs_to :item
+  belongs_to :item, :class_name => ShopBunny.item_model_class_name
   
   validates_presence_of :cart_id
   validates_presence_of :item_id

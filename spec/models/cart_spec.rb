@@ -25,7 +25,7 @@ describe Cart do
     it "should be able to set a default quantity with 1" do
       proc {@cart.add_item(@article1)}.should change(@cart, :item_count).by(1)      
     end
-   
+       
     context "with an article" do
       before(:each) do
         @cart.add_item(@article1, :quantity => 10)
@@ -45,7 +45,13 @@ describe Cart do
 
       it "should be able to set the quantity of an article directly" do
         proc {@cart.update_item(@article1, :quantity => 5)}.should change(@cart, :item_count).to(5)
-      end    
+      end  
+      
+      it "JSON representation should include cart_items" do
+        decoded = ActiveSupport::JSON.decode(@cart.to_json)
+        decoded['cart']['cart_items'].should_not be_empty 
+        # FIXME Test existence of other values like, total, coupons etc.
+      end
     end
     
     context "adding coupon codes" do

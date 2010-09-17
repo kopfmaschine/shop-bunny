@@ -6,7 +6,7 @@
       <th>Item price</th>
       <th>Action</th>
     </tr>
-    <% Item.limit(10).each do |item| %>
+    <% @cart.item_model.limit(10).each do |item| %>
     <tr>
       <th><%= item.id %></th>
       <th><%= item.price %></th>
@@ -16,7 +16,7 @@
   </table>
 </table>
 
-<%= form_for @cart do |f| %>
+<%= form_for @cart, :url => cart_path do |f| %>
   <h1>Shopping Cart</h1>
   <table>
     <tr>
@@ -50,7 +50,7 @@
 <% end %>
 
 
-<%= form_for @cart do |f| %>
+<%= form_for @cart, :url => cart_path do |f| %>
   <h1>Available coupons</h2>
   <ul>
   <% Coupon.limit(10).all.each do |coupon| %>

@@ -1,8 +1,8 @@
 Description:
-    Explain the generator
+    Install ShopBunny assets
 
 Example:
-    rails generate shop_bunny Thing
-
-    This will create:
-        what/will/it/create
+    rails generate shop_bunny:install
+    
+    Make sure to look at config/initializers/shop_bunny.rb after you run the generator.
+    

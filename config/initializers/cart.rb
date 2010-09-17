@@ -1,1 +1,0 @@
-ShopBunny.shipping_cost_calculator = DefaultShippingCostCalculator

@@ -28,7 +28,7 @@ describe CartsController do
     get :add_item, :item_id => item1
     # FIXME This 'map' sounds weird?
     assigns[:cart].cart_items.map(&:item).should == [item1]
-    response.should redirect_to(assigns[:cart])
+    response.should redirect_to :action => :show
   end
   
   context "with items in cart" do
@@ -48,14 +48,14 @@ describe CartsController do
       get :remove_item, {:item_id => @item1}, { :cart_id => @cart.id }
       # FIXME This 'map' sounds also weird?
       assigns[:cart].cart_items.map(&:item).should == [@item2]
-      response.should redirect_to(assigns[:cart])
+      response.should redirect_to :action => :show
     end
     
     it 'should update the quantity of a cart item' do
       cart_item = @cart.cart_items.first
       put :update, {:cart => { :cart_items_attributes => [{:id => cart_item.id, :quantity => 42 }]}}, {:cart_id => @cart.id}
       assigns[:cart].cart_items.first.quantity.should be(42)
-      response.should redirect_to(assigns[:cart])
+      response.should redirect_to :action => :show
     end
   end
   
@@ -64,7 +64,7 @@ describe CartsController do
     put :update, :cart => { :coupon_code => coupon.code }
     cart = assigns[:cart]
     cart.coupons.should include(coupon)
-    response.should redirect_to(assigns[:cart])
+    response.should redirect_to :action => :show
   end
   
   it "handles an incorrect coupon code" do

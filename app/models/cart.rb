@@ -6,8 +6,7 @@ class Cart < ActiveRecord::Base
   accepts_nested_attributes_for :cart_items, :allow_destroy => true 
   before_save :update_coupons
   attr_accessible :coupon_code, :cart_items_attributes
-  validate :coupon_code_must_be_valid
-    
+  validate :coupon_code_must_be_valid    
   
   def items
     self.cart_items
@@ -76,6 +75,11 @@ class Cart < ActiveRecord::Base
   
   def shipping_cost_calculator
     ShopBunny.shipping_cost_calculator
+  end
+  
+  # Returns the class/model of the items you can buy. (Products)
+  def item_model
+    ShopBunny.item_model_class_name.constantize
   end
   
   private
