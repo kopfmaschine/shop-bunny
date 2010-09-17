@@ -1,0 +1,6 @@
+- See also TODOs in sourcecode
+- Reduce dependencies to a minimum
+- Setup manifest (files =) and dependencies in gemspec
+- How to customize the controller?
+- How to customize the routes?
+- Make ORM agnostic
