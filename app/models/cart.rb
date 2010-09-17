@@ -82,6 +82,21 @@ class Cart < ActiveRecord::Base
     ShopBunny.item_model_class_name.constantize
   end
   
+  # Make
+  def as_json(options={})
+    { 
+      :cart => attributes.
+      merge(
+        :cart_items => cart_items.as_json,                
+        :item_count => item_count,
+        :coupons => coupons.as_json,
+        :item_sum => item_sum,
+        :shipping_costs => shipping_costs,
+        :total => total
+      )
+    }
+  end
+  
   private
   
   def update_coupons

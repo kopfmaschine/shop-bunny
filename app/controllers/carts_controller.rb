@@ -1,12 +1,11 @@
 class CartsController < ApplicationController
-  respond_to :html
+  respond_to :html, :json
   before_filter :find_cart
   before_filter :find_item, :only => [:add_item, :remove_item]
     
   def show
-  end
-  
-  # TODO Add js responds for add_item and remove_item
+    respond_with @cart
+  end  
   
   def add_item
     @cart.add_item(@item) if @item
