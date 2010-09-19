@@ -59,7 +59,7 @@ describe CartsController do
     end
   end
   
-  it "shoul add correct coupon code" do
+  it "should add correct coupon code" do
     coupon = Coupon.make(:shipping)
     put :update, :cart => { :coupon_code => coupon.code }
     cart = assigns[:cart]
@@ -82,4 +82,23 @@ describe CartsController do
   #   cart.coupons.should_not include(coupon)
   #   response.should redirect_to(assigns[:cart])    
   # end
+  
+  context "controller enhancement" do
+    module TestEnhancement
+      def was_included
+        true
+      end
+    end
+    
+    it "should not be included when not set in the config" do
+      load "#{Rails.root}/app/controllers/carts_controller.rb"
+      controller.respond_to?(:was_included).should be_false
+    end
+    
+    it "should be included when set in the config" do
+      ShopBunny.controller_enhancement = TestEnhancement
+      load "#{Rails.root}/app/controllers/carts_controller.rb"
+      controller.respond_to?(:was_included).should be_true
+    end
+  end
 end

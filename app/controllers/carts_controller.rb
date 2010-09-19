@@ -2,6 +2,10 @@ class CartsController < ApplicationController
   respond_to :html, :json
   before_filter :find_cart
   before_filter :find_item, :only => [:add_item, :remove_item]
+  
+  if ShopBunny.controller_enhancement
+    include ShopBunny.controller_enhancement
+  end
     
   def show
     respond_with @cart
