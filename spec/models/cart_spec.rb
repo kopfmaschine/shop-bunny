@@ -96,6 +96,15 @@ describe Cart do
           @cart.coupons << Coupon.make(:shipping)
           @cart.shipping_costs.should be_close(0,0.01) 
         end
+        
+        it "can not have a negative total" do
+          @cart.total.should >(0)
+
+          @cart.coupons << Coupon.make(:euro10, :discount_credit => @cart.total + 10)
+
+          @cart.total.should be_close(0, 0.01)
+        end
+        
       end
     end
   end

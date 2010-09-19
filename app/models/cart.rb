@@ -37,7 +37,8 @@ class Cart < ActiveRecord::Base
     sum *= relative_discount
     
     sum + shipping_costs
-    sum 
+    
+    [0, sum].max
   end
   
   #increases the quantity of an article. creates a new one if it doesn't exist
