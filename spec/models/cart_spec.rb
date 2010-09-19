@@ -36,9 +36,15 @@ describe Cart do
         @cart.cart_items.should be_empty
       end
 
-      it "should be able to remove articles" do
+      it "should be able to remove all occurences of an article in the cart" do
         # FIXME DRY?
-        proc {@cart.remove_item(@article1)}.should change(@cart, :item_count).by(-1)
+        article1_count = @cart.cart_items.select {|ci| ci.item == @article1}.first.quantity
+        @cart.item_count.should be(article1_count)
+        proc {@cart.remove_item(@article1)}.should change(@cart, :item_count).by(-1 * article1_count)
+        
+        @cart.item_count.should be(0)
+        
+        @cart.add_item(@article1, :quantity => 10)
         proc {@cart.remove_item(@article1, :quantity => 100)}.should change(@cart, :item_count).to(0)
         @cart.cart_items.should be_empty
       end
