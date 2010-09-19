@@ -10,7 +10,7 @@
     <tr>
       <th><%= item.id %></th>
       <th><%= item.price %></th>
-      <th><%= link_to("Add to cart", add_item_cart_path(:item_id => item.id)) %></th>
+      <th><%= link_to("Add to cart", add_item_to_cart_path(:item_id => item.id)) %></th>
     </tr>
     <% end %>
   </table>
