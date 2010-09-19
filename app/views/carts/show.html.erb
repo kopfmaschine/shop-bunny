@@ -27,13 +27,15 @@
           <th>Item id</th>
           <th>Item price</th>
           <th>Item quantity</th>
+          <th>Remove</th>
         </tr>
     
-        <%= f.fields_for :cart_items do |i| %>
+        <%= f.fields_for :cart_items do |cart_item| %>
           <tr>
-            <td><%= i.object.item.id %></td>
-            <td><%= i.object.item.price %></td>
-            <td><%= i.text_field :quantity %></td>        
+            <td><%= cart_item.object.item.id %></td>
+            <td><%= cart_item.object.item.price %></td>
+            <td><%= cart_item.text_field :quantity %></td>        
+            <td><%= link_to 'Remove', remove_item_from_cart_path(:item_id => cart_item.object.item.id) %></td>
           </tr>
         <% end %>
       </table>
