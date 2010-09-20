@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = "shop_bunny"
-  s.version = 0.7
+  s.version = "0.7.0.1"
   s.platform = Gem::Platform::RUBY
   s.authors = ["kopfmaschine.com"]
   s.email = ["jan@kopfmaschine.com"]
@@ -11,6 +11,6 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = ">= 1.3.6"
   s.has_rdoc = true
   # If you need to check in files that aren't .rb files, add them here
-  s.files = Dir["{lib}/**/*.rb", "app/**/*", "db/migrate/*", "*.md"]
+  s.files = Dir["{lib}/**/*.rb", "app/**/*", "db/migrate/*", "*.md", "config/initializers/*", "config/routes.rb"]
   s.require_path = 'lib'
 end
