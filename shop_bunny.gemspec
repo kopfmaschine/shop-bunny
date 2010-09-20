@@ -9,8 +9,8 @@ Gem::Specification.new do |s|
   s.description = "A simple shop gem that integrates a cart and coupons functionality"
 
   s.required_rubygems_version = ">= 1.3.6"
-
+  s.has_rdoc = true
   # If you need to check in files that aren't .rb files, add them here
-  s.files = Dir["{lib}/**/*.rb", "bin/*", "LICENSE", "*.md"]
+  s.files = Dir["{lib}/**/*.rb", "app/**/*", "db/migrate/*", "*.md"]
   s.require_path = 'lib'
 end
