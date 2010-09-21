@@ -24,6 +24,9 @@ class CartsController < ApplicationController
       format.html { redirect_to :action => :show }
     end
   end
+
+  def checkout
+  end
   
   def update
     @cart.update_attributes(params[:cart])

@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   resource :cart, :only => [:show, :update] do 
+      get :checkout
       get :add_item, :as => 'add_item_to'
       get :remove_item, :as => 'remove_item_from'
   end
