@@ -36,7 +36,7 @@ class Cart < ActiveRecord::Base
     sum -= absolute_discount
     sum *= relative_discount
     
-    sum + shipping_costs
+    sum += shipping_costs
     
     [0, sum].max
   end
