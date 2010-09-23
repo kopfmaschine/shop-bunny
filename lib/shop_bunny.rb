@@ -3,6 +3,7 @@ module ShopBunny
   require 'shop_bunny/engine' if defined?(Rails) && Rails::VERSION::MAJOR == 3
   require 'shop_bunny/shipping_cost_calculator'
   require 'shop_bunny/cart_module'
+  require 'shop_bunny/cart_controller_module'
   
   mattr_accessor :item_model_class_name
   @@item_model_class_name = 'Item'
