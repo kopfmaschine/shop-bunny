@@ -1,3 +1,3 @@
 class CartsController < ApplicationController
-  include ShopBunny::CartModule
+  include ShopBunny::CartControllerModule
 end
