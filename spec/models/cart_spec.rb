@@ -83,12 +83,12 @@ describe Cart do
       context "and coupons" do
         it "should calculate the sum with a 20% off coupon" do
           @cart.coupons << Coupon.make(:percent20off)
-          @cart.total.should be_close(@cart.item_sum*0.8, 0.01)
+          @cart.total.should be_close(@cart.item_sum*0.8 + @cart.shipping_costs, 0.01)
         end
         
         it "should reduce items sum by 10" do
           @cart.coupons << Coupon.make(:euro10)
-          @cart.total.should be_close(@cart.item_sum - 10, 0.01)
+          @cart.total.should be_close(@cart.item_sum - 10 + @cart.shipping_costs, 0.01)
         end
         
         it "should be no shipping costs with a coupon" do
