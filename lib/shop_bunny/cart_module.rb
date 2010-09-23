@@ -1,6 +1,5 @@
 module ShopBunny
-  module Cart
-    
+  module CartModule
     def self.included(clazz)
       clazz.send(:respond_to, :html, :json)
       clazz.send(:before_filter, :find_cart)
