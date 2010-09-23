@@ -15,10 +15,4 @@ ShopBunny.setup do  |config|
   #
   # config.shipping_cost_calculator = MyShippingCostCalculator
   
-  # ShopBunny.controller_enhancement is a module that is included into the
-  # CartsController. You can e.g. control which layout is used for rendering
-  # the cart or add filters. E.g. just drop a ShopBunnyEnhancements module in
-  # lib/shop_bunny_enhancements.rb and use it like this:
-  # require 'shop_bunny_enhancements'
-  # config.controller_enhancement = ShopBunnyEnhancements
 end
