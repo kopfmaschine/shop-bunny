@@ -26,6 +26,13 @@ describe Cart do
       proc {@cart.add_item(@article1)}.should change(@cart, :item_count).by(1)      
     end
        
+    context "without any articles" do
+      it "knows that it is empty" do
+        @cart.cart_items.should be_empty
+        @cart.should be_empty
+      end
+    end
+       
     context "with an article" do
       before(:each) do
         @cart.add_item(@article1, :quantity => 10)

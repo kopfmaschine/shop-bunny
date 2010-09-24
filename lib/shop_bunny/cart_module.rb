@@ -1,7 +1,6 @@
 module ShopBunny
   module CartModule
   
-  
     def self.included(clazz)
       clazz.send(:attr_accessor, :coupon_code)
       clazz.send(:has_many, :cart_items, :dependent => :destroy)
@@ -13,9 +12,6 @@ module ShopBunny
       clazz.send(:validate, :coupon_code_must_be_valid)
     end
   
-  
-  
-    
     def items
       self.cart_items
     end
@@ -90,6 +86,10 @@ module ShopBunny
     # Returns the class/model of the items you can buy. (Products)
     def item_model
       ShopBunny.item_model_class_name.constantize
+    end
+    
+    def empty?
+      cart_items.empty?
     end
     
     # Make
