@@ -1,5 +1,5 @@
 CartItem.blueprint do
-  cart_id 1
-  article_id 1
+  cart
+  item
   quantity 1
 end
