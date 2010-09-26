@@ -10,6 +10,9 @@ class CartItem < ActiveRecord::Base
   after_update :destroy_if_empty
   # TODO attr_accessible :quantity
   
+  def total_price
+    quantity * item.price
+  end
 
   private
   
