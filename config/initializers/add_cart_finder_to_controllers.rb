@@ -12,5 +12,9 @@ module ActionController
         session[:cart_id] = @cart.id
       end
     end
+    
+    def clear_cart
+      session[:cart_id] = nil
+    end
   end
 end

@@ -57,6 +57,14 @@ describe CartsController do
       assigns[:cart].cart_items.first.quantity.should be(42)
       response.should redirect_to :action => :show
     end
+    
+    it "can clear the cart" do
+      get :show, {}, { :cart_id => @cart.id }
+      
+      session[:cart_id].should_not be_nil
+      controller.send(:clear_cart)
+      session[:cart_id].should be_nil
+    end
   end
   
   it "should add correct coupon code" do

@@ -88,6 +88,7 @@ module ShopBunny
       ShopBunny.item_model_class_name.constantize
     end
     
+    # Check if the cart is empty
     def empty?
       cart_items.empty?
     end
