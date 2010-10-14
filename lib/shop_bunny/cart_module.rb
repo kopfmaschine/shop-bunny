@@ -30,8 +30,7 @@ module ShopBunny
       self.cart_items.inject(0) {|sum,e| sum += e.quantity*e.item.price}
     end
 
-    # Calculates the total sum and applies the coupons discount! 
-    def total
+    def items_with_coupons
       sum = item_sum
 
       absolute_discount = coupons.sum(:discount_credit)
@@ -39,10 +38,12 @@ module ShopBunny
 
       sum -= absolute_discount
       sum *= relative_discount
-      
-      sum += shipping_costs
-      
-      [0, sum].max
+    end
+
+    # Calculates the total sum and applies the coupons discount! 
+    def total
+            
+      [0, items_with_coupons + shipping_costs].max
     end
     
     #increases the quantity of an article. creates a new one if it doesn't exist
