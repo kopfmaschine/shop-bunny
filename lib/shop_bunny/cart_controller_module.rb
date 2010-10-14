@@ -11,7 +11,11 @@ module ShopBunny
     end  
     
     def add_item
-      quantity = params[:quantity].to_i || 1
+      if !params[:quantity].blank?
+        quantity = params[:quantity].to_i
+      else
+        quantity = 1
+      end
       @cart.add_item(@item, :quantity => quantity) if @item
       respond_with @cart do |format|
         format.html { redirect_to :action => :show }
