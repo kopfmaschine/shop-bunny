@@ -12,7 +12,7 @@ group :development, :test do
   gem 'capybara'
   gem "autotest"
   gem 'shoulda'
-  gem "rspec-rails", "2.0.0.beta.22"
+  gem "rspec-rails", "2.0.0"
   gem 'shoulda'
   gem 'mocha'
   gem 'machinist'
