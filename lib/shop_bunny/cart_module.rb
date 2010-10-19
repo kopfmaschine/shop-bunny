@@ -112,7 +112,8 @@ module ShopBunny
           :coupons => coupons.as_json,
           :item_sum => item_sum,
           :shipping_costs => shipping_costs,
-          :total => total
+          :total => total,
+          :items_with_coupons => items_with_coupons
         )
       }
     end
