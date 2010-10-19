@@ -27,7 +27,15 @@ module ShopBunny
 
     # Calculates the sum of all cart_items, excluding the coupons discount!
     def item_sum
-      self.cart_items.inject(0) {|sum,e| sum += e.quantity*e.item.price}
+      begin
+        self.cart_items.inject(0) do |sum,e|
+          logger.warn "#{e.item.nil?}: #{e.inspect}"
+          sum += e.quantity*e.item.price
+        end
+      rescue
+        logger.warn "item_sum could not be calculated"
+        t('shop_bunny.incalculatable')
+      end
     end
 
     def items_with_coupons
