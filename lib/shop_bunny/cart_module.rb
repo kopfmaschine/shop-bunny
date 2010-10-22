@@ -107,8 +107,8 @@ module ShopBunny
       { 
         :cart => attributes.
         merge(
-          :cart_items => cart_items.as_json,                
-          :item_count => item_count,
+          :cart_items => cart_items.as_json,
+          :item_count => item_count || 0,
           :coupons => coupons.as_json,
           :item_sum => item_sum,
           :shipping_costs => shipping_costs,
