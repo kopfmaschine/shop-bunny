@@ -29,12 +29,11 @@ module ShopBunny
     def item_sum
       begin
         self.cart_items.inject(0) do |sum,e|
-          logger.warn "#{e.item.nil?}: #{e.inspect}"
-          sum += e.quantity*e.item.price
+          sum += e.quantity*e.item.price unless e.item.nil?
         end
-      rescue
-        logger.warn "item_sum could not be calculated"
-        t('shop_bunny.incalculatable')
+      rescue Exception => err
+        logger.warn "item_sum could not be calculated: #{err}"
+        "error: item not processible"
       end
     end
 
