@@ -8,6 +8,10 @@ class CartItem < ActiveRecord::Base
   
   before_validation :set_default_quantity
   after_update :destroy_if_empty
+  
+  after_save :touch_cart
+  after_destroy :touch_cart
+  
   # TODO attr_accessible :quantity
   
   def total_price
@@ -22,5 +26,10 @@ class CartItem < ActiveRecord::Base
   
   def destroy_if_empty
     self.destroy if quantity.to_i <= 0
+  end
+  
+  protected
+  def touch_cart
+    cart.touch if cart
   end
 end
