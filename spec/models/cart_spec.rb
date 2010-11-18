@@ -26,6 +26,21 @@ describe Cart do
       proc {@cart.add_item(@article1)}.should change(@cart, :item_count).by(1)      
     end
        
+    it "passes shipping_cost requests to the shipping costs calculator" do
+      calculator = mock()
+      calculator.expects(:costs_for).with(@cart, anything).once
+      
+      @cart.stubs(:shipping_cost_calculator).returns(calculator)
+      @cart.shipping_costs
+      
+      calculator = mock()
+      calculator.expects(:costs_for).with(@cart, :net_costs => true).once
+      
+      @cart.stubs(:shipping_cost_calculator).returns(calculator)
+      
+      @cart.shipping_costs(:net_costs => true)
+    end
+       
     context "without any articles" do
       it "knows that it is empty" do
         @cart.cart_items.should be_empty

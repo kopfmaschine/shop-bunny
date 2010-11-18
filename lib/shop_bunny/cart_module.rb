@@ -20,9 +20,9 @@ module ShopBunny
       self.cart_items.inject(0) {|sum,e| sum += e.quantity}
     end
     
-    def shipping_costs
+    def shipping_costs(options = {})
       return 0 if coupons.any?(&:removes_shipping_cost)
-      shipping_cost_calculator.costs_for(self)
+      shipping_cost_calculator.costs_for(self, options)
     end
 
     # Calculates the sum of all cart_items, excluding the coupons discount!
