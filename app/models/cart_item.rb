@@ -12,6 +12,10 @@ class CartItem < ActiveRecord::Base
   after_save :touch_cart
   after_destroy :touch_cart
   
+  ShopBunny.cart_item_enhancements.each do |enhancement|
+    include enhancement
+  end
+  
   # TODO attr_accessible :quantity
   
   def total_price
@@ -26,6 +30,12 @@ class CartItem < ActiveRecord::Base
   
   def destroy_if_empty
     self.destroy if quantity.to_i <= 0
+  end
+  
+  def self.include_enhancements
+    ShopBunny.cart_item_enhancements.each do |enhancement|
+      include enhancement
+    end
   end
   
   protected

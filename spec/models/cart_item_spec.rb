@@ -1,7 +1,6 @@
 require 'spec_helper'
-
-describe CartItem do
   
+describe CartItem do
   before(:each) do
     @cart_item = CartItem.make
   end
