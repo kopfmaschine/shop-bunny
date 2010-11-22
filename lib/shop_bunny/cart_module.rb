@@ -66,12 +66,13 @@ module ShopBunny
     #removes a quantity of an article specified by :article_id, returns nil if no article has been found
     def remove_item(item,options = {})
       cart_item = self.cart_items.find_by_item_id(item)
-      
-      options[:quantity] ||= cart_item.quantity
       if cart_item
-        cart_item.quantity -= options[:quantity]
-        cart_item.save!
-        self.reload
+        options[:quantity] ||= cart_item.quantity
+        if cart_item
+          cart_item.quantity -= options[:quantity]
+          cart_item.save!
+          self.reload
+        end
       end
       cart_item
     end
