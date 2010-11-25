@@ -102,6 +102,12 @@ module ShopBunny
       cart_items.empty?
     end
     
+    # Remove all items from the cart
+    def clear!
+      cart_items.each {|i| i.destroy}
+      cart_items.clear
+    end
+    
     # Make
     def as_json(options={})
       { 

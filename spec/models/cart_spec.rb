@@ -102,6 +102,17 @@ describe Cart do
         @cart.item_sum.should be_close(10*10.0+2*20.0+4*30.3,0.01)
       end
       
+      it "can clear all items from the cart" do
+        @cart.cart_items.size.should be > 0
+        a_cart_item = @cart.cart_items.last
+        
+        @cart.clear!
+        @cart.cart_items.size.should be 0
+
+        CartItem.find_by_id(a_cart_item.id).should be_nil
+      end
+      
+      
       context "and coupons" do
         it "should calculate the sum with a 20% off coupon" do
           @cart.coupons << Coupon.make(:percent20off)
