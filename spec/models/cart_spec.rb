@@ -205,6 +205,39 @@ describe Cart do
         @cart.remove_item(item1)
         @cart.coupons.size.should be 0
       end
+      
+      it "coupons reappear when the cart had enough items, the user then removed some so that the coupon wasn't automatically applicable anymore and then adds more items to the cart" do
+        coupon = Coupon.make(:value_of_automatic_add => 10)
+        
+        item1 = Item.make(:price => 5)
+        item2 = Item.make(:price => 6)
+        item3 = Item.make(:price => 7)
+        
+        @cart.clear!
+        @cart.add_item(item1)
+        @cart.add_item(item2)
+        @cart.remove_item(item2)
+        @cart.add_item(item3)
+        
+        @cart.coupons.size.should be 1
+        @cart.coupons.should include(coupon)
+      end
+      
+      it "adds or removes the coupon when updating a cart item" do
+        coupon = Coupon.make(:value_of_automatic_add => 10)
+        item = Item.make(:price => 5)
+        
+        @cart.clear!
+        @cart.add_item(item)
+        @cart.coupons.size.should be 0
+        
+        @cart.update_item(item, :quantity => 2)
+        @cart.coupons.size.should be 1
+        @cart.coupons.should include(coupon)
+        
+        @cart.update_item(item, :quantity => 1)
+        @cart.coupons.size.should be 0
+      end
     end
     
   end
