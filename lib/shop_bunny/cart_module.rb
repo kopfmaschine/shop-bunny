@@ -59,6 +59,10 @@ module ShopBunny
       cart_item = self.cart_items.find_or_create_by_item_id(item.id)
       cart_item.quantity += options[:quantity]
       cart_item.save!
+      
+      update_automatic_coupons!
+      
+      self.save!
       self.reload
       cart_item
     end
@@ -74,6 +78,9 @@ module ShopBunny
           self.reload
         end
       end
+      
+      update_automatic_coupons!
+      
       cart_item
     end
 
@@ -106,6 +113,10 @@ module ShopBunny
     def clear!
       cart_items.each {|i| i.destroy}
       cart_items.clear
+      
+      coupon_uses.each {|u| u.destroy}
+      coupon_uses.clear
+      coupons.clear
     end
     
     # Make
@@ -125,6 +136,19 @@ module ShopBunny
     end
     
     protected
+    
+    def update_automatic_coupons!
+      coupon_uses.each do |use|
+        use.destroy if use.coupon.value_of_automatic_add
+      end
+      
+      save!
+      reload
+      
+      Coupon.valid.automatically_added_over(item_sum).each do |coupon|
+        coupons << coupon
+      end
+    end
     
     def update_coupons
       Array(@coupon_code).each { |code|

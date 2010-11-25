@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100916194407) do
+ActiveRecord::Schema.define(:version => 20101125140137) do
 
   create_table "cart_items", :force => true do |t|
     t.integer  "cart_id"
@@ -34,10 +34,10 @@ ActiveRecord::Schema.define(:version => 20100916194407) do
   end
 
   create_table "coupons", :force => true do |t|
-    t.boolean  "removes_tax",           :default => false
-    t.float    "discount_percentage",   :default => 1.0
-    t.float    "discount_credit",       :default => 0.0
-    t.boolean  "removes_shipping_cost", :default => false
+    t.boolean  "removes_tax",            :default => false
+    t.float    "discount_percentage",    :default => 1.0
+    t.float    "discount_credit",        :default => 0.0
+    t.boolean  "removes_shipping_cost",  :default => false
     t.integer  "bonus_article_id"
     t.date     "valid_from"
     t.date     "valid_until"
@@ -45,6 +45,7 @@ ActiveRecord::Schema.define(:version => 20100916194407) do
     t.string   "code"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.float    "value_of_automatic_add"
   end
 
   create_table "items", :force => true do |t|

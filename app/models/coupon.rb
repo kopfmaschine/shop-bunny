@@ -11,6 +11,9 @@ class Coupon < ActiveRecord::Base
   
   # TODO Add self destruction when coupon has expired?
   
+  scope :valid, lambda {{:conditions => ['(coupons.valid_from IS NULL OR coupons.valid_from <= ?) AND (coupons.valid_until IS NULL OR coupons.valid_until >= ?)', Time.now, Time.now]}}
+  scope :automatically_added_over, lambda {|value| {:conditions => ['value_of_automatic_add <= ?', value]}}
+  
   def expired?
     not_yet_valid? || has_expired?
   end

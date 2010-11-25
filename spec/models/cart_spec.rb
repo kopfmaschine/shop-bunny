@@ -102,14 +102,23 @@ describe Cart do
         @cart.item_sum.should be_close(10*10.0+2*20.0+4*30.3,0.01)
       end
       
-      it "can clear all items from the cart" do
+      it "can clear all items and coupons from the cart" do
         @cart.cart_items.size.should be > 0
         a_cart_item = @cart.cart_items.last
         
+        coupon = Coupon.make()
+        @cart.coupons << coupon
+        @cart.save!
+        @cart.reload
+        @cart.coupons.size.should be > 0
+        a_coupon_use = @cart.coupon_uses.last
+        
         @cart.clear!
         @cart.cart_items.size.should be 0
+        @cart.coupons.size.should be 0
 
         CartItem.find_by_id(a_cart_item.id).should be_nil
+        CouponUse.find_by_id(a_coupon_use.id).should be_nil
       end
       
       
@@ -140,5 +149,63 @@ describe Cart do
         
       end
     end
+    
+    context "automatic coupons" do
+      it "adds coupons automatically which are valid (datewise) and are set to be enabled automatically at a certain total price of a cart" do
+        cheap_product = Item.make(:price => 49.99)
+        expensive_product = Item.make(:price => 50.01)
+
+        intermediate_mock = mock
+        
+        Coupon.stubs(:valid).returns(intermediate_mock)
+        
+        @cart.clear!
+        intermediate_mock.expects(:automatically_added_over).with(cheap_product.price).returns([])        
+        @cart.add_item(cheap_product)
+        @cart.coupons.size.should be 0
+      
+        @cart.clear!
+        intermediate_mock.expects(:automatically_added_over).with(expensive_product.price).returns([Coupon.make])
+        @cart.add_item(expensive_product)
+        @cart.coupons.size.should be 1
+      end
+      
+      it "never adds an automatic coupon twice" do
+        coupon = Coupon.make(:value_of_automatic_add => 10)
+        item = Item.make(:price => 10)
+        
+        @cart.clear!
+        @cart.add_item(item)
+        @cart.coupons.size.should be 1
+        @cart.coupons.should include coupon
+        
+        @cart.add_item(item)
+        @cart.coupons.size.should be 1
+        @cart.coupons.should include coupon
+      end
+      
+      it "it removes automatically added coupons that are not longer applicable from the cart whenever an item is removed" do
+        coupon1 = Coupon.make(:value_of_automatic_add => 10)
+        coupon2 = Coupon.make(:value_of_automatic_add => 15)
+        
+        item1 = Item.make(:price => 12)
+        item2 = Item.make(:price =>  3)
+        
+        @cart.clear!
+        @cart.add_item(item1)
+        @cart.add_item(item2)
+        @cart.coupons.size.should be 2
+        @cart.coupons.should include(coupon1)
+        @cart.coupons.should include(coupon2)
+        
+        @cart.remove_item(item2)
+        @cart.coupons.size.should be 1
+        @cart.coupons.should include(coupon1)
+        
+        @cart.remove_item(item1)
+        @cart.coupons.size.should be 0
+      end
+    end
+    
   end
 end

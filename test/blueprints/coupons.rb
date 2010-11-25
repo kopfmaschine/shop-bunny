@@ -8,7 +8,7 @@ Coupon.blueprint do
 #  valid_from "2010-09-15"
 #  valid_until "2010-09-15"
   title "default"
-  code "secretcode"
+  code { "secretcode#{TestSerialNumber.next}" }
 end
 
 Coupon.blueprint(:shipping) do
