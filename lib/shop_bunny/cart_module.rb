@@ -92,12 +92,12 @@ module ShopBunny
         cart_item.save!
         self.reload
       end
-      
+
       update_automatic_coupons!
-      
+
       cart_item
     end
-    
+
     def shipping_cost_calculator
       ShopBunny.shipping_cost_calculator
     end
@@ -137,22 +137,21 @@ module ShopBunny
         )
       }
     end
-    
-    protected
-    
+
     def update_automatic_coupons!
       coupon_uses.each do |use|
         use.destroy if use.coupon.value_of_automatic_add
       end
-      
+
       save!
       reload
-      
+
       Coupon.valid.automatically_added_over(item_sum).each do |coupon|
         coupons << coupon
       end
     end
-    
+
+    protected
     def update_coupons
       Array(@coupon_code).each { |code|
         coupon = Coupon.find_by_code(code)

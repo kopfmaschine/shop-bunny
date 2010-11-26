@@ -34,16 +34,17 @@ module ShopBunny
     
     def update
       @cart.update_attributes(params[:cart])
+      @cart.update_automatic_coupons!
       respond_with @cart do |format|
-        format.html { 
+        format.html {
           if @cart.errors.any?
-            render 'show' 
+            render 'show'
           else
             # We have to redirect by hand here, because 
             # url_for(@cart) returns "/cart.x" when cart is a singular resource
             # (see routes.rb). This is a known limitation of Rails.
             # See https://rails.lighthouseapp.com/projects/8994/tickets/4168
-            redirect_to :action => :show 
+            redirect_to :action => :show
           end
         }
       end
