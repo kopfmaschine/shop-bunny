@@ -6,7 +6,12 @@ module ActionController
     # TODO This could result in a mass of empty carts. A Problem?
     def find_cart
       if session[:cart_id]
-        @cart = Cart.find(session[:cart_id])
+        begin
+          @cart = Cart.find(session[:cart_id])
+        rescue ActiveRecord::RecordNotFound => e
+          session[:cart_id] = nil
+        end
+
       else
         @cart = Cart.create
         session[:cart_id] = @cart.id
