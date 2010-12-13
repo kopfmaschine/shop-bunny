@@ -9,7 +9,8 @@ module ActionController
         begin
           @cart = Cart.find(session[:cart_id])
         rescue ActiveRecord::RecordNotFound => e
-          session[:cart_id] = nil
+          @cart = Cart.create
+          session[:cart_id] = @cart.id
         end
 
       else
