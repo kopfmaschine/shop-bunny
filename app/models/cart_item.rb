@@ -19,7 +19,7 @@ class CartItem < ActiveRecord::Base
   end
   
   def item=(new_item)
-    write_attribute(:raw_item, new_item.shop_bunny_json_attributes.to_json)
+    write_attribute(:raw_item, (new_item.respond_to?(:shop_bunny_json_attributes) ? new_item.shop_bunny_json_attributes : new_item.attributes).to_json)
     @parsed_raw_item = nil
     new_item
   end

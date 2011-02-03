@@ -25,7 +25,7 @@ describe CartItem do
     it "marshalls it's item and reloads it on request" do
       item = Item.make
       @cart_item.item = item
-      @cart_item.raw_item.should == item.to_json
+      @cart_item.raw_item.should == item.shop_bunny_json_attributes.to_json
       @cart_item.item.should == item
     end
     
@@ -33,6 +33,22 @@ describe CartItem do
       item = Item.make
       cart_item = CartItem.new(:item => item)
       cart_item.item.should == item
+    end
+    
+    it "uses the shop_bunny_json_attributes method method to marshal if present" do
+      item = Object.new
+      item.expects(:respond_to?).with(:shop_bunny_json_attributes).returns(true)
+      item.expects(:shop_bunny_json_attributes).returns({})
+      
+      cart_item = CartItem.new(:item => item)
+    end
+    
+    it "uses the attributes method to marshal if the item has no shop_bunny_json_attributes method" do
+      item = Object.new
+      item.expects(:respond_to?).with(:shop_bunny_json_attributes).returns(false)
+      item.expects(:attributes).returns({})
+      
+      cart_item = CartItem.new(:item => item)
     end
   end
 end
