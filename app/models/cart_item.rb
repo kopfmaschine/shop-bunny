@@ -27,7 +27,9 @@ class CartItem < ActiveRecord::Base
   def item
     return nil unless raw_item
     unless @parsed_raw_item
-      json = JSON.parse(raw_item).values.first
+      json = JSON.parse(raw_item)
+      json = json.values.first if json.kind_of?(Array)
+        
       if json
         @parsed_raw_item = ShopBunny.item_model_class_name.constantize.new(json)
         @parsed_raw_item.id = json['id']
