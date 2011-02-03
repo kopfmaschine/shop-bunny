@@ -3,9 +3,12 @@ class AddRawItemToCartItems < ActiveRecord::Migration
     add_column :cart_items, :raw_item, :text
     
     CartItem.all.each do |e|
-      if e.item
-        e.raw_item = e.item.to_json
-        e.save!
+      if e.read_attribute(:item_id)
+        i = ShopBunny.item_model_class_name.constantize.find_by_id(e.read_attribute(:item_id))
+        if i
+          e.raw_item = i.to_json
+          e.save!
+        end
       end
     end
   end
