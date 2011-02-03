@@ -1,9 +1,9 @@
 class CartItem < ActiveRecord::Base
   belongs_to :cart
-  belongs_to :item, :class_name => ShopBunny.item_model_class_name
+  # belongs_to :item, :class_name => ShopBunny.item_model_class_name
   
   validates_presence_of :cart_id
-  validates_presence_of :item_id
+  # validates_presence_of :item_id
   validates_numericality_of :quantity
   
   before_validation :set_default_quantity
@@ -16,6 +16,24 @@ class CartItem < ActiveRecord::Base
   
   def total_price
     quantity * item.price
+  end
+  
+  def item=(new_item)
+    write_attribute(:raw_item, new_item.to_json)
+    @parsed_raw_item = nil
+    new_item
+  end
+  
+  def item
+    return nil unless raw_item
+    unless @parsed_raw_item
+      json = JSON.parse(raw_item).values.first
+      if json
+        @parsed_raw_item = ShopBunny.item_model_class_name.constantize.new(json)
+        @parsed_raw_item.id = json['id']
+      end
+    end
+    @parsed_raw_item
   end
 
   private

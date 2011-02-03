@@ -56,7 +56,8 @@ module ShopBunny
     #increases the quantity of an article. creates a new one if it doesn't exist
     def add_item(item,options = {})
       options[:quantity] ||= 1
-      cart_item = self.cart_items.find_or_create_by_item_id(item.id)
+      cart_item = self.cart_items.select {|e| e.item.id == item.id}.first
+      cart_item ||= self.cart_items.build(:item => item)
       cart_item.quantity += options[:quantity]
       cart_item.save!
       
@@ -69,7 +70,7 @@ module ShopBunny
     
     #removes a quantity of an article specified by :article_id, returns nil if no article has been found
     def remove_item(item,options = {})
-      cart_item = self.cart_items.find_by_item_id(item)
+      cart_item = self.cart_items.select {|e| e.item.id == item.id}.first
       if cart_item
         options[:quantity] ||= cart_item.quantity
         if cart_item
@@ -86,7 +87,7 @@ module ShopBunny
 
     #sets the quantity of an article specified by :article_id, returns nil if no article has been found
     def update_item(item,options)
-      cart_item = self.cart_items.find_by_item_id(item)
+      cart_item = self.cart_items.select {|e| e.item.id == item.id}.first
       if cart_item
         cart_item.quantity = options[:quantity]
         cart_item.save!
@@ -143,7 +144,7 @@ module ShopBunny
         use.destroy if use.coupon.value_of_automatic_add
       end
 
-      save!
+      save
       reload
 
       Coupon.valid.automatically_added_over(item_sum).each do |coupon|
