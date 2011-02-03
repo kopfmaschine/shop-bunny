@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = "shop_bunny"
-  s.version = "0.7.4.19"
+  s.version = "0.7.4.20"
   s.platform = Gem::Platform::RUBY
   s.authors = ["kopfmaschine.com"]
   s.email = ["jan@kopfmaschine.com"]

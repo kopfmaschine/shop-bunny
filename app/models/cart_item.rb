@@ -19,7 +19,7 @@ class CartItem < ActiveRecord::Base
   end
   
   def item=(new_item)
-    write_attribute(:raw_item, new_item.to_json)
+    write_attribute(:raw_item, new_item.shop_bunny_json_attributes.to_json)
     @parsed_raw_item = nil
     new_item
   end
@@ -28,7 +28,6 @@ class CartItem < ActiveRecord::Base
     return nil unless raw_item
     unless @parsed_raw_item
       json = JSON.parse(raw_item)
-      json = json.values.first if json.kind_of?(Hash)
         
       if json
         @parsed_raw_item = ShopBunny.item_model_class_name.constantize.new(json)
