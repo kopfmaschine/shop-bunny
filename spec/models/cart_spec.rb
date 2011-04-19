@@ -99,16 +99,24 @@ describe Cart do
 
       it "should only add one coupon of a kind" do
         coupon = Coupon.make(:percent20off)
+        
         @cart.coupon_code = coupon.code
         @cart.coupons.should be_empty
         @cart.save
+        @cart.reload
+        
         @cart.coupons.should include coupon
         @cart.coupons.size.should == 1
+        
         @cart.coupon_code = ""
         @cart.save
+        @cart.reload
+        
         @cart.coupons.size.should == 1
         @cart.coupon_code = coupon.code
         @cart.save
+        @cart.reload
+
         @cart.coupons.size.should == 1
       end
     end
