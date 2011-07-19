@@ -37,6 +37,17 @@ class CartItem < ActiveRecord::Base
     @parsed_raw_item
   end
 
+  def as_json(options={})
+    {
+      :quantity => quantity,
+      :code => item.code,
+      :product_id => item.product_id,
+      :product_name => item.product.title,
+      :price => item.product.price,
+      :id => item.id
+    }
+  end
+
   private
   
   def set_default_quantity
