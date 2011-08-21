@@ -122,7 +122,7 @@ describe Cart do
 
       it "should not add a coupon if they are all used up" do
         coupon = Coupon.make(:percent20off)
-        coupon.max_uses = 0
+        coupon.max_uses = -1
         coupon.save
         @cart.coupon_code = coupon.code
         @cart.coupons.should be_empty
