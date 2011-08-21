@@ -156,7 +156,7 @@ module ShopBunny
     def update_coupons
       Array(@coupon_code).each { |code|
         coupon = Coupon.find_by_code(code)
-        coupons << coupon if coupon && !coupons.include?(coupon)
+        coupons << coupon if coupon && !coupons.include?(coupon) && (coupon.max_uses.nil? || coupon.max_uses < coupon.coupon_uses.count)
       }
     end
     

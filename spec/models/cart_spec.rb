@@ -119,6 +119,17 @@ describe Cart do
 
         @cart.coupons.size.should == 1
       end
+
+      it "should not add a coupon if they are all used up" do
+        coupon = Coupon.make(:percent20off)
+        coupon.max_uses = 0
+        coupon.save
+        @cart.coupon_code = coupon.code
+        @cart.coupons.should be_empty
+        @cart.save
+        @cart.reload
+        @cart.coupons.size.should == 0
+      end
     end
     
     context "with mutiple articles" do

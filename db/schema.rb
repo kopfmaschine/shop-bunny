@@ -10,11 +10,10 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110203005514) do
+ActiveRecord::Schema.define(:version => 20110821124655) do
 
   create_table "cart_items", :force => true do |t|
     t.integer  "cart_id"
-    t.integer  "article_id"
     t.integer  "quantity",   :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -47,6 +46,7 @@ ActiveRecord::Schema.define(:version => 20110203005514) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.float    "value_of_automatic_add"
+    t.integer  "max_uses"
   end
 
   create_table "items", :force => true do |t|
