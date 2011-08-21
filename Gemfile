@@ -10,9 +10,9 @@ gem 'sqlite3-ruby', :require => 'sqlite3'
 group :development, :test do
   gem "rails3-generators"
   gem 'capybara'
-  gem "autotest"
+  gem "autotest-standalone"
   gem 'shoulda'
-  gem "rspec-rails", "2.0.0"
+  gem "rspec-rails"
   gem 'shoulda'
   gem 'mocha'
   gem 'machinist'
