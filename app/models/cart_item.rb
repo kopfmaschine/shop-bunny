@@ -40,10 +40,6 @@ class CartItem < ActiveRecord::Base
   def as_json(options={})
     {
       :quantity => quantity,
-      :code => item.code,
-      :product_id => item.product_id,
-      :product_name => item.product.title,
-      :price => item.product.price,
       :id => item.id
     }
   end
