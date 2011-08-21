@@ -167,6 +167,8 @@ module ShopBunny
           errors.add(:coupon_code, "is unknown")
         elsif coupon.expired?
           errors.add(:coupon_code, "is expired")
+        elsif coupon.max_uses && coupon.max_uses < coupon.coupon_uses.count
+          errors.add(:coupon_code, "is overused")
         end
       }
     end
