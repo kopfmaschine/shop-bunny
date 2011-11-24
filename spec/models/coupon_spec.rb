@@ -13,11 +13,17 @@ describe Coupon do
   it "should be valid within the given range" do
     coupon = Coupon.make(:daterange)
     Time.stubs(:now).returns(Time.local(2010,9,14).to_time)
-    coupon.should_not be_expired
+    coupon.should_not have_expired
+    coupon.should_not be_not_yet_valid
+    coupon.should be_redeemable
     Time.stubs(:now).returns(Time.local(2010,2,2).to_time)
-    coupon.should be_expired
+    coupon.reload.should_not have_expired
+    coupon.should be_not_yet_valid
+    coupon.should_not be_redeemable
     Time.stubs(:now).returns(Time.local(2010,9,22).to_time)
-    coupon.should be_expired
+    coupon.should have_expired
+    coupon.should_not be_redeemable
+    coupon.should_not be_not_yet_valid
   end
   
   context "scopes" do
@@ -38,12 +44,16 @@ describe Coupon do
       invalid_coupon2.valid_from = Time.local(2010,9,25,17,31).to_datetime
       invalid_coupon2.valid_until = Time.local(2010,9,26,15,00).to_datetime
       invalid_coupon2.save!
+
+      inactive_coupon = Coupon.make(:active => false)
       
       coupon_without_dates = Coupon.make(:valid_from => nil, :valid_until => nil)
       
       Coupon.valid.size.should be 2
       Coupon.valid.should include valid_coupon
       Coupon.valid.should include coupon_without_dates
+
+      (Coupon.all - Coupon.valid).should include inactive_coupon
     end
     
     it "can find coupons with an automatic add value less than the given value" do
