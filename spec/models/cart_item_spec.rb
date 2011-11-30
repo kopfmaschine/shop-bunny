@@ -14,11 +14,11 @@ describe CartItem do
   it "knows it's total price" do
     @cart_item.item.price = 10
 
-    @cart_item.total_price.should be_close(10, 0.001)
+    @cart_item.total_price.should be_within(0.001).of(10)
     
     @cart_item.quantity = 5
     
-    @cart_item.total_price.should be_close(50, 0.001)
+    @cart_item.total_price.should be_within(0.001).of(50)
   end
   
   describe "item marshalling" do

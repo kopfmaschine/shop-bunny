@@ -13,13 +13,13 @@ describe Cart do
     it "should be able to add articles" do
       proc {@cart.add_item(@article1, :quantity => 1)}.should change(@cart, :item_count).by(1)
       @cart.items.size.should be(1)
-      @cart.item_sum.should be_close(10.0,0.01)
+      @cart.item_sum.should be_within(0.01).of(10)
       proc {@cart.add_item(@article2, :quantity => 1)}.should change(@cart, :item_count).by(1)
       @cart.items.size.should be(2)
-      @cart.item_sum.should be_close(30.0,0.01)
+      @cart.item_sum.should be_within(0.01).of(30)
       proc {@cart.add_item(@article1, :quantity => 3)}.should change(@cart, :item_count).by(3)
       @cart.items.size.should be(2)
-      @cart.item_sum.should be_close(60.0,0.01)
+      @cart.item_sum.should be_within(0.01).of(60)
     end    
     
     it "should be able to set a default quantity with 1" do
@@ -141,7 +141,7 @@ describe Cart do
       end
 
       it "should be able to calculate the sum" do
-        @cart.item_sum.should be_close(10*10.0+2*20.0+4*30.3,0.01)
+        @cart.item_sum.should be_within(0.01).of(10*10.0+2*20.0+4*30.3)
       end
       
       it "can clear all items and coupons from the cart" do
@@ -167,18 +167,18 @@ describe Cart do
       context "and coupons" do
         it "should calculate the sum with a 20% off coupon" do
           @cart.coupons << Coupon.make(:percent20off)
-          @cart.total.should be_close(@cart.item_sum*0.8 + @cart.shipping_costs, 0.01)
+          @cart.total.should be_within(0.01).of(@cart.item_sum*0.8 + @cart.shipping_costs)
         end
         
         it "should reduce items sum by 10" do
           @cart.coupons << Coupon.make(:euro10)
-          @cart.total.should be_close(@cart.item_sum - 10 + @cart.shipping_costs, 0.01)
+          @cart.total.should be_within(0.01).of(@cart.item_sum - 10 + @cart.shipping_costs)
         end
         
         it "should be no shipping costs with a coupon" do
-          @cart.shipping_costs.should be_close(8.90,0.01) 
+          @cart.shipping_costs.should be_within(0.01).of(8.90)
           @cart.coupons << Coupon.make(:shipping)
-          @cart.shipping_costs.should be_close(0,0.01) 
+          @cart.shipping_costs.should be_within(0.01).of(0)
         end
         
         it "can not have a negative total" do
@@ -186,7 +186,7 @@ describe Cart do
 
           @cart.coupons << Coupon.make(:euro10, :discount_credit => @cart.total + 10)
 
-          @cart.total.should be_close(0, 0.01)
+          @cart.total.should be_within(0.01).of(0)
         end
         
       end
