@@ -9,28 +9,28 @@ Coupon.blueprint do
 #  valid_until "2010-09-15"
   title "default"
   code { "secretcode#{TestSerialNumber.next}" }
-  active true
+  state 'active'
 end
 
 Coupon.blueprint(:shipping) do
   removes_shipping_cost true
   title "No Shipping"
   code "shipping"
-  active true
+  state 'active'
 end
 
 Coupon.blueprint(:percent20off) do
   discount_percentage 0.8
   title "20% Off!"
   code "percent20off"
-  active true
+  state 'active'
 end
 
 Coupon.blueprint(:euro10) do
   discount_credit 10.0  
   title "10€ abzug"
   code "euro10"
-  active true
+  state 'active'
 end
 
 Coupon.blueprint(:daterange) do
@@ -38,5 +38,5 @@ Coupon.blueprint(:daterange) do
   valid_until Time.local(2010,9,20)
   title "Datumscoupon"
   code "daterange"
-  active true
+  state 'active'
 end

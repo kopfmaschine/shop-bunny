@@ -25,7 +25,79 @@ describe Coupon do
     coupon.should_not be_redeemable
     coupon.should_not be_not_yet_valid
   end
-  
+
+  describe "#state" do
+    it "is inactive by default" do
+      Coupon.new.state.should == 'inactive'
+    end
+
+    it "can be overwritten" do
+      Coupon.new(:state => 'active').state.should == 'active'
+      Coupon.make(:state => 'redeemed').state.should == 'redeemed'
+      Coupon.make(:state => 'inactive').state.should == 'inactive'
+    end
+
+    describe "#activate!" do
+      it "changes the state from inactive to active" do
+        coupon = Coupon.make(:state => 'inactive')
+        coupon.activate!
+        coupon.state.should == 'active'
+      end
+
+      it "fails for all other states" do
+        %w(active redeemed).each do |state|
+          lambda { Coupon.make(:state => state).activate! }.should raise_error(Coupon::InvalidEvent)
+        end
+      end
+
+      it "does not save the record" do
+        coupon = Coupon.new
+        coupon.activate!
+        coupon.should be_new_record
+      end
+    end
+
+    describe "#redeem!" do
+      it "changes the state from active to redeemed" do
+        coupon = Coupon.make(:state => 'active')
+        coupon.redeem!
+        coupon.state.should == 'redeemed'
+      end
+
+      it "fails for all other states" do
+        %w(inactive redeemed).each do |state|
+          lambda { Coupon.make(:state => state).redeem! }.should raise_error(Coupon::InvalidEvent)
+        end
+      end
+
+      it "fails if redeemable? returns false" do
+        lambda {
+          coupon = Coupon.make(:state => 'active')
+          coupon.stubs(:redeemable?).returns(false)
+          coupon.redeem!
+        }.should raise_error
+      end
+
+      it "does not save the record" do
+        coupon = Coupon.new(:state => 'active')
+        coupon.redeem!
+        coupon.should be_new_record
+      end
+    end
+  end
+
+  describe "#redeemable?" do
+    it "is false by default" do
+      Coupon.new.redeemable?.should be_false
+    end
+
+    it "is only true if state is active" do
+      %w(inactive active redeemed).each do |state|
+        Coupon.make(:state => state).redeemable?.should == (state == 'active')
+      end
+    end
+  end
+
   context "scopes" do
     it "can find the valid coupons" do
       Time.stubs(:now).returns(Time.local(2010,9,22,14,31).to_time)
@@ -45,7 +117,7 @@ describe Coupon do
       invalid_coupon2.valid_until = Time.local(2010,9,26,15,00).to_datetime
       invalid_coupon2.save!
 
-      inactive_coupon = Coupon.make(:active => false)
+      inactive_coupon = Coupon.make(:state => 'inactive')
       
       coupon_without_dates = Coupon.make(:valid_from => nil, :valid_until => nil)
       
