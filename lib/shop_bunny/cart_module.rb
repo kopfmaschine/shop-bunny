@@ -161,7 +161,7 @@ module ShopBunny
     def update_coupons
       Array(@coupon_code).each { |code|
         coupon = Coupon.find_by_code(code)
-        coupons << coupon if coupon && !coupons.include?(coupon) && (coupon.max_uses.nil? || coupon.max_uses >= coupon.coupon_uses.count)
+        coupons << coupon if coupon && !coupons.include?(coupon) && coupon.redeemable?
       }
     end
     
@@ -172,8 +172,8 @@ module ShopBunny
           errors.add(:coupon_code, "is unknown")
         elsif coupon.expired?
           errors.add(:coupon_code, "is expired")
-        elsif coupon.max_uses && coupon.max_uses < coupon.coupon_uses.count
-          errors.add(:coupon_code, "is overused")
+        elsif coupon.used_up?
+          errors.add(:coupon_code, "is used_up")
         end
       }
     end

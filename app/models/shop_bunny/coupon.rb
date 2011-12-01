@@ -30,8 +30,12 @@ class ShopBunny::Coupon < ActiveRecord::Base
     Time.now > self.valid_until if self.valid_until 
   end
 
+  def used_up?
+    max_uses && max_uses <= coupon_uses.count
+  end
+
   def redeemable?
-    !not_yet_valid? && !has_expired? && state == 'active'
+    !not_yet_valid? && !has_expired? && state == 'active' && !used_up?
   end
 
   def activate!

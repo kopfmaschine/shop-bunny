@@ -97,6 +97,35 @@ describe ShopBunny::Coupon do
         Coupon.make(:state => state).redeemable?.should == (state == 'active')
       end
     end
+
+    it "is false if it is used_up" do
+      coupon = Coupon.make
+      coupon.stubs(:used_up?).returns(true)
+      coupon.should_not be_redeemable
+    end
+  end
+
+  describe "#used_up?" do
+    it "becomes true if used one time" do
+      coupon = Coupon.make(:max_uses => 1)
+      coupon.should_not be_used_up
+      Cart.make(:coupon_code => coupon.code)
+      coupon.reload.should be_used_up
+    end
+
+    it "becomes true if max_uses is reached" do
+      coupon = Coupon.make(:max_uses => 2)
+      coupon.should_not be_used_up
+      2.times { Cart.make(:coupon_code => coupon.code) }
+      coupon.should be_used_up
+    end
+
+    it "never becomes true if max_uses is blank (unlimited)" do
+      coupon = Coupon.make(:max_uses => nil)
+      coupon.should_not be_used_up
+      2.times { Cart.make(:coupon_code => coupon.code) }
+      coupon.should_not be_used_up
+    end
   end
 
   context "scopes" do

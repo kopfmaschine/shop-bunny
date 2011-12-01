@@ -107,6 +107,14 @@ describe Cart do
         @cart.coupons.should include coupon
       end
 
+      it "should create coupon_uses" do
+        coupon = Coupon.make
+        @cart.coupon_code = coupon.code
+        lambda {
+          @cart.save!
+        }.should change { coupon.coupon_uses.count }.by(1)
+      end
+
       it "should only add one coupon of a kind" do
         coupon = Coupon.make(:percent20off)
         
