@@ -1,4 +1,5 @@
 .bundle
-db/*.sqlite3
-log/*.log
+*.sqlite3
+*.log
 tmp/**/*
+spec/dummy/tmp/**/*

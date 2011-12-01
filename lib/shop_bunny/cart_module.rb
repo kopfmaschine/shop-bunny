@@ -3,8 +3,8 @@ module ShopBunny
   
     def self.included(clazz)
       clazz.send(:attr_accessor, :coupon_code)
-      clazz.send(:has_many, :cart_items, :dependent => :destroy)
-      clazz.send(:has_many, :coupon_uses, :dependent => :destroy)
+      clazz.send(:has_many, :cart_items, :dependent => :destroy, :class_name => 'ShopBunny::CartItem')
+      clazz.send(:has_many, :coupon_uses, :dependent => :destroy, :class_name => 'ShopBunny::CouponUse')
       clazz.send(:has_many, :coupons, :through => :coupon_uses)
       clazz.send(:accepts_nested_attributes_for, :cart_items, :allow_destroy => true )
       clazz.send(:before_save, :update_coupons)
@@ -60,8 +60,9 @@ module ShopBunny
     #increases the quantity of an article. creates a new one if it doesn't exist
     def add_item(item,options = {})
       options[:quantity] ||= 1
-      cart_item = self.cart_items.select {|e| e.item.id == item.id}.first
-      cart_item ||= self.cart_items.build(:item => item)
+      cart_item = self.cart_items.select {|e| e.item.id == item.id}.first 
+      cart_item ||= self.cart_items.build
+      cart_item.item = item
       cart_item.quantity += options[:quantity]
       cart_item.save!
       

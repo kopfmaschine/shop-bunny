@@ -1,6 +1,7 @@
-    require 'spec_helper'
+require 'spec_helper'
 
 describe Cart do
+  include ShopBunny
   it { should have_many :cart_items}
   
   context "A Cart" do
@@ -8,6 +9,7 @@ describe Cart do
       @article1 = Item.make(:price => 10.0)
       @article2 = Item.make(:price => 20.0)
       @cart = Cart.make
+      Coupon.destroy_all # FIXME WTF? Aren't we using transactional fixtures?
     end    
     
     it "should be able to add articles" do
@@ -243,15 +245,11 @@ describe Cart do
       it "never adds an automatic coupon twice" do
         coupon = Coupon.make(:value_of_automatic_add => 10)
         item = Item.make(:price => 10)
-        
         @cart.clear!
         @cart.add_item(item)
-        @cart.coupons.size.should be 1
-        @cart.coupons.should include coupon
-        
         @cart.add_item(item)
-        @cart.coupons.size.should be 1
         @cart.coupons.should include coupon
+        @cart.coupons.count.should be
       end
       
       it "it removes automatically added coupons that are not longer applicable from the cart whenever an item is removed" do

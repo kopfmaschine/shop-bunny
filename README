@@ -1,1 +1,18 @@
 ShopBunny doesn't taste like chicken.
+
+=== Installation
+1. Running the generator
+  Currently ShopBunny needs a "Cart" model in the host application.
+  You can install both plus all necessary migrations and an initializerusing the generator:
+    rails generate shop_bunny:install
+
+2. Mounting the app
+  Add this to your routes file:
+    mount ShopBunny::Engine => '/'
+  You can access the shopping cart at '/cart'
+
+3. Setup you "Item" class
+  A Cart has man "items". To setup the class of "item" to "Product" you'd have to set the following inside
+  'config/initializers/shop_bunny, which was installed by the generator above:
+    config.item_model_class_name = 'Product'
+

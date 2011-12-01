@@ -2,7 +2,7 @@ class AddRawItemToCartItems < ActiveRecord::Migration
   def self.up
     add_column :cart_items, :raw_item, :text
     
-    CartItem.all.each do |e|
+    ShopBunny::CartItem.all.each do |e|
       if e.read_attribute(:item_id)
         i = ShopBunny.item_model_class_name.constantize.find_by_id(e.read_attribute(:item_id))
         if i

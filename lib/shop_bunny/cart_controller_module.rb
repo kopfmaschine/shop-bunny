@@ -18,33 +18,26 @@ module ShopBunny
       end
       @cart.add_item(@item, :quantity => quantity) if @item
       respond_with @cart do |format|
-        format.html { redirect_to :action => :show }
+        format.html { redirect_to cart_path }
       end
     end
     
     def remove_item
       @cart.remove_item(@item) if @item
       respond_with @cart do |format|
-        format.html { redirect_to :action => :show }
+        format.html { redirect_to cart_path }
       end
-    end
-
-    def checkout
     end
     
     def update
       @cart.update_attributes(params[:cart])
       @cart.update_automatic_coupons!
       respond_with @cart do |format|
-        format.html {
-          if @cart.errors.any?
-            render 'show'
+        format.html { 
+          if @cart.errors.empty?
+            redirect_to cart_path
           else
-            # We have to redirect by hand here, because 
-            # url_for(@cart) returns "/cart.x" when cart is a singular resource
-            # (see routes.rb). This is a known limitation of Rails.
-            # See https://rails.lighthouseapp.com/projects/8994/tickets/4168
-            redirect_to :action => :show
+            render :show
           end
         }
       end
