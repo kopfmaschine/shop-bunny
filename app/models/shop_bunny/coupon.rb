@@ -12,8 +12,6 @@ class ShopBunny::Coupon < ActiveRecord::Base
   after_save :touch_cart
   after_destroy :touch_cart
 
-  # TODO Add self destruction when coupon has expired?
-
   scope :valid, lambda {{:conditions => ['(coupons.valid_from IS NULL OR coupons.valid_from <= ?) AND (coupons.valid_until IS NULL OR coupons.valid_until >= ?) AND coupons.state = ?', Time.now, Time.now, 'active']}}
   scope :automatically_added_over, lambda {|value| {:conditions => ['value_of_automatic_add <= ?', value]}}
 
@@ -21,7 +19,6 @@ class ShopBunny::Coupon < ActiveRecord::Base
     not_yet_valid? || has_expired?
   end
 
-  # FIXME rename?
   def not_yet_valid?
     Time.now < self.valid_from if self.valid_from 
   end
