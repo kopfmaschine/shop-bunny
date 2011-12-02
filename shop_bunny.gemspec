@@ -21,4 +21,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency "machinist"
   s.add_development_dependency "mocha"
   s.add_development_dependency "shoulda-matchers"
+  s.add_development_dependency "capybara"
 end

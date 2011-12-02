@@ -1,0 +1,10 @@
+en:
+  activerecord:
+    errors:
+      models:
+        cart:
+          attributes:
+            coupon_code:
+              unknown: "The provided code is unknown or invalid"
+              expired: "The provided code has expired"
+              used_up: "The number of uses for this code has been exceeded"

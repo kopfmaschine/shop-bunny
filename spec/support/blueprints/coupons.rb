@@ -40,3 +40,11 @@ ShopBunny::Coupon.blueprint(:daterange) do
   code "daterange#{TestSerialNumber.next}"
   state 'active'
 end
+
+ShopBunny::Coupon.blueprint(:expired) do
+  valid_from 3.days.ago
+  valid_until 2.days.ago
+  title "Datumscoupon"
+  code "daterange#{TestSerialNumber.next}"
+  state 'active'
+end

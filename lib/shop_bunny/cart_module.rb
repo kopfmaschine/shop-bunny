@@ -169,11 +169,11 @@ module ShopBunny
       Array(@coupon_code).each { |code|
         coupon = Coupon.find_by_code(code)
         if coupon.nil?
-          errors.add(:coupon_code, "is unknown")
+          errors.add(:coupon_code, :unknown)
         elsif coupon.expired?
-          errors.add(:coupon_code, "is expired")
+          errors.add(:coupon_code, :expired)
         elsif coupon.used_up?
-          errors.add(:coupon_code, "is used_up")
+          errors.add(:coupon_code, :used_up)
         end
       }
     end

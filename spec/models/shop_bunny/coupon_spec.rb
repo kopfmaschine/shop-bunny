@@ -120,6 +120,11 @@ describe ShopBunny::Coupon do
       coupon.should be_used_up
     end
 
+    it "is true if max_uses is zero" do
+      coupon = Coupon.make(:max_uses => 0)
+      coupon.should be_used_up
+    end
+
     it "never becomes true if max_uses is blank (unlimited)" do
       coupon = Coupon.make(:max_uses => nil)
       coupon.should_not be_used_up

@@ -11,7 +11,7 @@
       <tr>
         <th><%= item.id %></th>
         <th><%= item.price %></th>
-        <th><%= link_to("Add to cart", add_item_to_cart_path(:item_id => item.id)) %></th>
+        <th id="<%= dom_id(item) %>"><%= link_to("Add to cart", add_item_to_cart_path(:item_id => item.id)) %></th>
       </tr>
       <% end %>
     </table>
@@ -35,20 +35,20 @@
             <td><%= cart_item.object.item.id %></td>
             <td><%= cart_item.object.item.price %></td>
             <td><%= cart_item.text_field :quantity %></td>        
-            <td><%= link_to 'Remove', remove_item_from_cart_path(:item_id => cart_item.object.item.id) %></td>
+            <td><%= link_to "Remove item #{cart_item.object.item.id}", remove_item_from_cart_path(:item_id => cart_item.object.item.id) %></td>
           </tr>
         <% end %>
       </table>
 
       <table class="cashpoint">
         <tr>
-          <td>Sum: <%= @cart.item_sum %></td>
+          <td>Sum: <span id="price-item-sum"><%= number_to_currency @cart.item_sum %></span></td>
         </tr>
         <tr>
-          <td>Shippin costs: <%= @cart.shipping_costs %></td>
+          <td>Shippin costs: <span id="price-shipping-costs"><%= number_to_currency @cart.shipping_costs %></span></td>
         </tr>
         <tr>
-          <td>Total: <%= @cart.total %></td>
+          <td>Total: <span id="price-total"><%= number_to_currency @cart.total %></span></td>
         </tr>
       </table>
   
@@ -64,18 +64,18 @@
         <li><%= coupon.code %></ti>
       <% end %>
       </ul>
-
       <h2>Your coupons</h2>
-      <ul>
+      <ul id="your_coupons">
       <% @cart.coupons.each do |coupon| %>
         <li><%= coupon.title %></ti>
       <% end %>
       </ul>
-      <p>
-        <%# TODO Show error messages  %>
-        <%= @cart.errors if @cart.errors.any? %>
-      </p>
-      <%= f.label :coupon_code, 'Got a code?' %>
+      <ul id="error_messages">
+      <% @cart.errors.full_messages.each do |err| %>
+        <li><%= err %></li>
+      <% end %>
+      </ul>
+      <%= f.label :coupon_code, 'Coupon code' %>
       <%= f.text_field :coupon_code %>
       <%= f.submit :value => "Add code" %>
     <% end %>
