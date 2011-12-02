@@ -1,12 +1,11 @@
-- Don't make the host app need to create Cart model
-- Add request tests
-- Add generator tests
+- Don't create a Cart for every new session. Only store the cart when adding items/coupons.
+- Don't make the host app need to create Cart model. Add ShopBunny::Cart.
 - Make Cart have many polymorphic items, so you don't have to setup config.item_model_class_name
+- Add generator tests.
 - Because ShopBunny.table_name_prefix is blank the app also works with 
   a 'coupons' table instead of 'shop_bunny_coupons'. This does not look very "black box", not sure if we should change this. 
 - Merge migrations into one (as long we are alpha)
 - Better README
 - How to customize the controller?
-- How to customize the routes?
-- Make ORM agnostic
+- Rename "discount_credit" to "credit" and "discount_percentage" to "discount" (Improve the API)
 - See also TODOs in sourcecode
