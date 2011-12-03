@@ -9,8 +9,6 @@ class ShopBunny::Coupon < ActiveRecord::Base
   validates_presence_of :title
 
   after_initialize { self.state ||= 'inactive' }
-  after_save :touch_cart
-  after_destroy :touch_cart
 
   scope :valid, lambda {{:conditions => ['(coupons.valid_from IS NULL OR coupons.valid_from <= ?) AND (coupons.valid_until IS NULL OR coupons.valid_until >= ?) AND coupons.state = ?', Time.now, Time.now, 'active']}}
   scope :automatically_added_over, lambda {|value| {:conditions => ['value_of_automatic_add <= ?', value]}}
@@ -43,10 +41,5 @@ class ShopBunny::Coupon < ActiveRecord::Base
   def redeem!
     raise InvalidEvent unless redeemable?
     self.state = 'redeemed'
-  end
-
-  protected
-  def touch_cart
-    carts.each {|cart| cart.touch}
   end
 end
