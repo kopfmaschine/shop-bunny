@@ -58,18 +58,16 @@
 
   <div class="coupons">
     <%= form_for @cart, :url => cart_path do |f| %>
-      <h1>Available coupons</h2>
-      <ul>
-      <% ShopBunny::Coupon.limit(10).all.each do |coupon| %>
-        <li><%= coupon.code %></ti>
-      <% end %>
-      </ul>
       <h2>Your coupons</h2>
-      <ul id="your_coupons">
-      <% @cart.coupons.each do |coupon| %>
-        <li><%= coupon.title %></ti>
+      <% if @cart.coupons.empty? %>
+        No coupons added
+      <% else %>
+        <ul id="your_coupons">
+        <% @cart.coupons.each do |coupon| %>
+          <li><%= coupon.title %></ti>
+        <% end %>
+        </ul>
       <% end %>
-      </ul>
       <ul id="error_messages">
       <% @cart.errors.full_messages.each do |err| %>
         <li><%= err %></li>
@@ -77,7 +75,7 @@
       </ul>
       <%= f.label :coupon_code, 'Coupon code' %>
       <%= f.text_field :coupon_code %>
-      <%= f.submit :value => "Add code" %>
+      <%= f.submit :value => "Add coupon" %>
     <% end %>
   </div>
 </div>

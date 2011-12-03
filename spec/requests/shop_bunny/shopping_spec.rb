@@ -3,7 +3,7 @@ require 'spec_helper'
 describe "On the cart page" do
   def add_coupon_code(code)
     fill_in 'Coupon code', :with => code
-    click_button 'Add code'
+    click_button 'Add coupon'
   end
 
   def add_item(item)
