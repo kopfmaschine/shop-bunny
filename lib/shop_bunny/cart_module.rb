@@ -57,7 +57,7 @@ module ShopBunny
       [0, items_with_coupons + shipping_costs].max
     end
     
-    #increases the quantity of an article. creates a new one if it doesn't exist
+    # Adds one or options[:quantity] number of items to the cart or increases it's quantity.
     def add_item(item,options = {})
       options[:quantity] ||= 1
       cart_item = self.cart_items.select {|e| e.item.id == item.id}.first 
@@ -73,7 +73,7 @@ module ShopBunny
       cart_item
     end
     
-    #removes a quantity of an article specified by :article_id, returns nil if no article has been found
+    # Decreases the quantity of an item in the cart by 1 or options[:quantity]
     def remove_item(item,options = {})
       cart_item = self.cart_items.select {|e| e.item.id == item.id}.first
       if cart_item
@@ -90,7 +90,7 @@ module ShopBunny
       cart_item
     end
 
-    #sets the quantity of an article specified by :article_id, returns nil if no article has been found
+    # Sets the quantity of the item to options[:quantity]
     def update_item(item,options)
       cart_item = self.cart_items.select {|e| e.item.id == item.id}.first
       if cart_item
@@ -128,7 +128,6 @@ module ShopBunny
       coupons.clear
     end
     
-    # Make
     def as_json(options={})
       { 
         :cart => attributes.
