@@ -70,7 +70,6 @@ module ShopBunny
       
       self.save!
       self.reload
-      cart_item
     end
     
     # Decreases the quantity of an item in the cart by 1 or options[:quantity]
@@ -86,8 +85,6 @@ module ShopBunny
       end
       
       update_automatic_coupons!
-      
-      cart_item
     end
 
     # Sets the quantity of the item to options[:quantity]
@@ -100,8 +97,6 @@ module ShopBunny
       end
 
       update_automatic_coupons!
-
-      cart_item
     end
 
     def shipping_cost_calculator
