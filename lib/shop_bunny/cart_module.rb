@@ -172,7 +172,7 @@ module ShopBunny
           errors.add(:coupon_code, :unknown)
         elsif coupon.expired?
           errors.add(:coupon_code, :expired)
-        elsif coupon.used_up?
+        elsif coupon.used_up? && !coupons.include?(coupon)
           errors.add(:coupon_code, :used_up)
         end
       }

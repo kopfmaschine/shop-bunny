@@ -99,12 +99,19 @@ describe Cart do
         @cart.errors[:coupon_code].should_not be_nil
       end
 
-      it "should add a coupon via update_coupons" do
+      it "should add a coupon after save via coupon_code=" do
         coupon = Coupon.make(:percent20off)
         @cart.coupon_code = coupon.code
         @cart.coupons.should be_empty
         @cart.save
         @cart.coupons.should include coupon
+      end
+
+      it "with max_uses=1 via coupon_code= should not invalidate the cart" do
+        coupon = Coupon.make(:max_uses => 1)
+        @cart.coupon_code = coupon.code
+        @cart.save!
+        @cart.should be_valid
       end
 
       it "should create coupon_uses" do

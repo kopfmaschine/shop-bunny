@@ -84,8 +84,12 @@ describe "On the cart page" do
 
     it "shows an error if the the maximum use count is exceeded" do
       coupon = ShopBunny::Coupon.make(:max_uses => 1)
-      add_coupon_code(coupon.code) # use coupon
-      visit cart_path # opens new session!
+      # use up coupon
+      add_coupon_code(coupon.code)
+      assert_no_errors
+      # try to the same coupon again in a new session
+      reset_session!
+      visit cart_path
       add_coupon_code(coupon.code)
       find('#error_messages').should have_content("The number of uses for this code has been exceeded")
     end
