@@ -37,53 +37,53 @@ describe ShopBunny::Coupon do
       Coupon.make(:state => 'redeemed').state.should == 'redeemed'
       Coupon.make(:state => 'inactive').state.should == 'inactive'
     end
+  end
 
-    describe "#activate!" do
-      it "changes the state from inactive to active" do
-        coupon = Coupon.make(:state => 'inactive')
-        coupon.activate!
-        coupon.state.should == 'active'
-      end
+  describe "#activate!" do
+    it "changes the state from inactive to active" do
+      coupon = Coupon.make(:state => 'inactive')
+      coupon.activate!
+      coupon.state.should == 'active'
+    end
 
-      it "fails for all other states" do
-        %w(active redeemed).each do |state|
-          lambda { Coupon.make(:state => state).activate! }.should raise_error(Coupon::InvalidEvent)
-        end
-      end
-
-      it "does not save the record" do
-        coupon = Coupon.new
-        coupon.activate!
-        coupon.should be_new_record
+    it "fails for all other states" do
+      %w(active redeemed).each do |state|
+        lambda { Coupon.make(:state => state).activate! }.should raise_error(Coupon::InvalidEvent)
       end
     end
 
-    describe "#redeem!" do
-      it "changes the state from active to redeemed" do
+    it "does not save the record" do
+      coupon = Coupon.new
+      coupon.activate!
+      coupon.should be_new_record
+    end
+  end
+
+  describe "#redeem!" do
+    it "changes the state from active to redeemed" do
+      coupon = Coupon.make(:state => 'active')
+      coupon.redeem!
+      coupon.state.should == 'redeemed'
+    end
+
+    it "fails for all other states" do
+      %w(inactive redeemed).each do |state|
+        lambda { Coupon.make(:state => state).redeem! }.should raise_error(Coupon::InvalidEvent)
+      end
+    end
+
+    it "fails if redeemable? returns false" do
+      lambda {
         coupon = Coupon.make(:state => 'active')
+        coupon.stubs(:redeemable?).returns(false)
         coupon.redeem!
-        coupon.state.should == 'redeemed'
-      end
+      }.should raise_error
+    end
 
-      it "fails for all other states" do
-        %w(inactive redeemed).each do |state|
-          lambda { Coupon.make(:state => state).redeem! }.should raise_error(Coupon::InvalidEvent)
-        end
-      end
-
-      it "fails if redeemable? returns false" do
-        lambda {
-          coupon = Coupon.make(:state => 'active')
-          coupon.stubs(:redeemable?).returns(false)
-          coupon.redeem!
-        }.should raise_error
-      end
-
-      it "does not save the record" do
-        coupon = Coupon.new(:state => 'active')
-        coupon.redeem!
-        coupon.should be_new_record
-      end
+    it "does not save the record" do
+      coupon = Coupon.new(:state => 'active')
+      coupon.redeem!
+      coupon.should be_new_record
     end
   end
 
