@@ -8,9 +8,9 @@ class ShopBunny::CartItem < ActiveRecord::Base
   
   before_validation :set_default_quantity
   after_update :destroy_if_empty
-  
-  # TODO attr_accessible :quantity
-  
+  after_save :update_automatic_coupons
+  after_destroy :update_automatic_coupons
+
   def total_price
     quantity * item.price
   end
@@ -42,7 +42,11 @@ class ShopBunny::CartItem < ActiveRecord::Base
   end
 
   private
-  
+
+  def update_automatic_coupons
+    cart.update_automatic_coupons! if cart
+  end
+
   def set_default_quantity
     self.quantity ||= 0
   end

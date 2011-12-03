@@ -31,7 +31,6 @@ module ShopBunny
     
     def update
       @cart.update_attributes(params[:cart])
-      @cart.update_automatic_coupons!
       respond_with @cart do |format|
         format.html { 
           if @cart.errors.empty?

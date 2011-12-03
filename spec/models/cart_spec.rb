@@ -9,7 +9,6 @@ describe Cart do
       @article1 = Item.make(:price => 10.0)
       @article2 = Item.make(:price => 20.0)
       @cart = Cart.make
-      Coupon.destroy_all # FIXME WTF? Aren't we using transactional fixtures?
     end    
     
     it "should be able to add articles" do
@@ -239,22 +238,13 @@ describe Cart do
     
     context "automatic coupons" do
       it "adds coupons automatically which are valid (datewise) and are set to be enabled automatically at a certain total price of a cart" do
-        cheap_product = Item.make(:price => 49.99)
         expensive_product = Item.make(:price => 50.01)
-
         intermediate_mock = mock
-        
         Coupon.stubs(:valid).returns(intermediate_mock)
-        
-        @cart.clear!
-        intermediate_mock.expects(:automatically_added_over).with(cheap_product.price).returns([])        
-        @cart.add_item(cheap_product)
-        @cart.coupons.size.should be 0
-      
-        @cart.clear!
-        intermediate_mock.expects(:automatically_added_over).with(expensive_product.price).returns([Coupon.make])
+        bonus_coupon = Coupon.make
+        intermediate_mock.expects(:automatically_added_over).with(expensive_product.price).returns([bonus_coupon])
         @cart.add_item(expensive_product)
-        @cart.coupons.size.should be 1
+        @cart.coupons.should == [bonus_coupon]
       end
       
       it "never adds an automatic coupon twice" do

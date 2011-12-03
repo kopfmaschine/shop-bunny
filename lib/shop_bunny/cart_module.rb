@@ -53,28 +53,21 @@ module ShopBunny
 
     # Calculates the total sum and applies the coupons discount! 
     def total
-            
       [0, items_with_coupons + shipping_costs].max
     end
     
     # Adds one or options[:quantity] number of items to the cart or increases it's quantity.
     def add_item(item,options = {})
-      options[:quantity] ||= 1
-      cart_item = self.cart_items.select {|e| e.item.id == item.id}.first 
-      cart_item ||= self.cart_items.build
-      cart_item.item = item
-      cart_item.quantity += options[:quantity]
+      cart_item = find_cart_item(item)
+      cart_item ||= self.cart_items.build(:item => item)
+      cart_item.quantity += options[:quantity] || 1
       cart_item.save!
-      
-      update_automatic_coupons!
-      
-      self.save!
       self.reload
     end
     
     # Decreases the quantity of an item in the cart by 1 or options[:quantity]
     def remove_item(item,options = {})
-      cart_item = self.cart_items.select {|e| e.item.id == item.id}.first
+      cart_item = find_cart_item(item)
       if cart_item
         options[:quantity] ||= cart_item.quantity
         if cart_item
@@ -83,20 +76,16 @@ module ShopBunny
           self.reload
         end
       end
-      
-      update_automatic_coupons!
     end
 
     # Sets the quantity of the item to options[:quantity]
     def update_item(item,options)
-      cart_item = self.cart_items.select {|e| e.item.id == item.id}.first
+      cart_item = find_cart_item(item)
       if cart_item
         cart_item.quantity = options[:quantity]
         cart_item.save!
         self.reload
       end
-
-      update_automatic_coupons!
     end
 
     def shipping_cost_calculator
@@ -139,19 +128,17 @@ module ShopBunny
     end
 
     def update_automatic_coupons!
-      coupon_uses.each do |use|
-        use.destroy if use.coupon.value_of_automatic_add
-      end
-
-      save
-      reload
-
+      coupon_uses.joins(:coupon).where('coupons.value_of_automatic_add IS NOT NULL').destroy_all
       Coupon.valid.automatically_added_over(item_sum).each do |coupon|
         coupons << coupon
       end
     end
 
     protected
+    def find_cart_item(item)
+      self.cart_items.detect {|e| e.item.id == item.id}
+    end
+
     def update_coupons
       Array(@coupon_code).each { |code|
         coupon = Coupon.find_by_code(code)

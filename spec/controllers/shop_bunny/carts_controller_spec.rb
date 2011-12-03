@@ -15,10 +15,6 @@ describe ShopBunny::CartsController do
     end
   }
 
-  def cart_path
-    '/cart'
-  end
-
   before(:each) do
     @cart = Cart.make
   end
@@ -98,13 +94,4 @@ describe ShopBunny::CartsController do
     cart.coupons.should_not include(coupon)
     response.should be_success
   end
-  
-  # it "handles a expired coupon code" do
-  #   coupon = Coupon.make(:shipping)
-  #   put :update, :cart => { :coupon_code => coupon.code }
-  #   cart = assigns[:cart]
-  #   cart.coupons.should_not include(coupon)
-  #   response.should redirect_to(assigns[:cart])    
-  # end
-  
 end
