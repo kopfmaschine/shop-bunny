@@ -36,10 +36,12 @@ class ShopBunny::Coupon < ActiveRecord::Base
   def activate!
     raise InvalidEvent unless state == 'inactive'
     self.state = 'active'
+    save!
   end
 
   def redeem!
     raise InvalidEvent unless redeemable?
     self.state = 'redeemed'
+    save!
   end
 end

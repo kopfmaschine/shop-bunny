@@ -52,10 +52,10 @@ describe ShopBunny::Coupon do
       end
     end
 
-    it "does not save the record" do
-      coupon = Coupon.new
+    it "saves the record" do
+      coupon = Coupon.make_unsaved(:state => 'inactive')
       coupon.activate!
-      coupon.should be_new_record
+      coupon.should be_persisted
     end
   end
 
@@ -80,10 +80,10 @@ describe ShopBunny::Coupon do
       }.should raise_error
     end
 
-    it "does not save the record" do
-      coupon = Coupon.new(:state => 'active')
+    it "saves the record" do
+      coupon = Coupon.make_unsaved
       coupon.redeem!
-      coupon.should be_new_record
+      coupon.should be_persisted
     end
   end
 
