@@ -102,13 +102,9 @@ module ShopBunny
       cart_items.empty? && bonus_items.empty?
     end
     
-    # Remove all items from the cart
+    # Remove all items and coupons from the cart
     def clear!
-      cart_items.each {|i| i.destroy}
       cart_items.clear
-      
-      coupon_uses.each {|u| u.destroy}
-      coupon_uses.clear
       coupons.clear
     end
     
