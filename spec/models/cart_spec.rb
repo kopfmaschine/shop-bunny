@@ -41,7 +41,26 @@ describe Cart do
       
       @cart.shipping_costs(:net_costs => true)
     end
-       
+
+    describe "adding coupons using #coupons<<" do
+      it "adds a coupon though CouponUse" do
+        coupon = Coupon.make
+        add_a_coupon = lambda {
+          @cart.coupons << coupon
+        }
+        add_a_coupon.should change { @cart.coupons.count }.by(1)
+        add_a_coupon.should change { CouponUse.count }.by(1)
+      end
+
+      it "adds a Coupon only once" do
+        coupon = Coupon.make
+        lambda {
+          @cart.coupons << coupon
+          @cart.coupons << coupon
+        }.should change { @cart.coupons.count }.by(1)
+      end
+    end
+
     context "#empty" do
       it "knows that it is empty when empty" do
         @cart.cart_items.should be_empty
@@ -91,7 +110,7 @@ describe Cart do
       end
     end
     
-    context "adding coupon codes" do
+    context "adding coupons with #coupon_code=" do
       it "should show an error when adding an incorrect coupon code" do
         @cart.coupon_code = "incorrectcode"
         @cart.should_not be_valid        

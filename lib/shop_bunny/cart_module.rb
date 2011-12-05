@@ -5,7 +5,7 @@ module ShopBunny
       clazz.send(:attr_accessor, :coupon_code)
       clazz.send(:has_many, :cart_items, :dependent => :destroy, :class_name => 'ShopBunny::CartItem')
       clazz.send(:has_many, :coupon_uses, :dependent => :destroy, :class_name => 'ShopBunny::CouponUse')
-      clazz.send(:has_many, :coupons, :through => :coupon_uses)
+      clazz.send(:has_many, :coupons, :through => :coupon_uses, :uniq => true)
       clazz.send(:accepts_nested_attributes_for, :cart_items, :allow_destroy => true )
       clazz.send(:before_save, :update_coupons)
       clazz.send(:attr_accessible, :coupon_code, :cart_items_attributes)
@@ -138,7 +138,7 @@ module ShopBunny
     def update_coupons
       Array(@coupon_code).each { |code|
         coupon = Coupon.find_by_code(code)
-        coupons << coupon if coupon && !coupons.include?(coupon) && coupon.redeemable?
+        coupons << coupon if coupon && coupon.redeemable?
       }
     end
     
