@@ -36,13 +36,25 @@ describe "On the cart page" do
       add_item(@item)
       find('#price-total').should have_content("$18.90")
     end
+
+    it "lists the item" do
+      add_item(@item)
+      find('#cart .items').should have_content("Remove item #{@item.id}")
+    end
   end
 
   describe "removing an item from the cart" do
+    before { add_item(@item) }
     it "resets the price" do
-      add_item(@item)
+      lambda {
+        remove_item(@item)
+      }.should change { find('#price-total').text }.from("$18.90").to("$8.90")
+    end
+
+    it "removes the item" do
+      find('#cart .items').should have_content("Remove item #{@item.id}")
       remove_item(@item)
-      find('#price-total').should have_content("$8.90")
+      find('#cart .items').should have_no_content("Remove item #{@item.id}")
     end
   end
 
@@ -65,10 +77,11 @@ describe "On the cart page" do
       find('#your_coupons').should have_content("New Coupon")
     end
 
-    it "applies the discout credit to the shipping costs" do
+    it "removes the coupon's credit from the total price" do
       coupon = ShopBunny::Coupon.make(:discount_credit => 5)
-      add_coupon_code(coupon.code)
-      find('#price-total').should have_content("$3.90")
+      lambda {
+        add_coupon_code(coupon.code)
+      }.should change { find('#price-total').text }.from("$8.90").to("$3.90")
     end
 
     it "shows an error if the code is unknown" do
@@ -80,6 +93,7 @@ describe "On the cart page" do
       expired = ShopBunny::Coupon.make(:expired)
       add_coupon_code(expired.code)
       find('#error_messages').should have_content("The provided code has expired")
+      page.should have_no_selector('#your_coupons')
     end
 
     it "shows an error if the the maximum use count is exceeded" do
