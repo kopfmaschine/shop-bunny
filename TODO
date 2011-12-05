@@ -1,5 +1,6 @@
 - Don't create a Cart for every new session. Only store the cart when adding items/coupons.
 - Don't make the host app need to create Cart model. Add ShopBunny::Cart.
+- The behaviour for Coupon#bonus_article_id is not used. Either spec and implement or remove.
 - Make Cart have many polymorphic items, so you don't have to setup config.item_model_class_name
 - Add generator tests.
 - Because ShopBunny.table_name_prefix is blank the app also works with 
