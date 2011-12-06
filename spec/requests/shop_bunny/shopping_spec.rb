@@ -84,6 +84,13 @@ describe "On the cart page" do
       }.should change { find('#price-total').text }.from("$8.90").to("$3.90")
     end
 
+    it "does not show a negative total price" do
+      coupon = ShopBunny::Coupon.make(:discount_credit => 10)
+      lambda {
+        add_coupon_code(coupon.code)
+      }.should change { find('#price-total').text }.from("$8.90").to("$0.00")
+    end
+
     it "shows an error if the code is unknown" do
       add_coupon_code('unknown')
       find('#error_messages').should have_content("The provided code is unknown or invalid")

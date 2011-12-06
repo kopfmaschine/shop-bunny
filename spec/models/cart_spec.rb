@@ -42,6 +42,14 @@ describe Cart do
       @cart.shipping_costs(:net_costs => true)
     end
 
+    describe "#items_with_coupons" do
+      it "might return a negative value" do
+        @cart.stubs(:item_sum).returns(100.0)
+        @cart.coupons << Coupon.make(:discount_credit => 110)
+        @cart.items_with_coupons.should == -10.0
+      end
+    end
+
     describe "adding coupons using #coupons<<" do
       it "adds a coupon though CouponUse" do
         coupon = Coupon.make
