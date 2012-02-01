@@ -41,10 +41,18 @@ describe Cart do
       @cart.shipping_costs(:net_costs => true)
     end
        
-    context "without any articles" do
-      it "knows that it is empty" do
+    context "#empty" do
+      it "knows that it is empty when empty" do
         @cart.cart_items.should be_empty
         @cart.should be_empty
+      end
+
+      it "is not empty when havin a bonus article" do
+        @item = Item.make
+        @coupon = Coupon.make(:bonus_article => @item)
+        @cart.coupon_code = @coupon.code
+        @cart.save
+        @cart.should_not be_empty
       end
     end
        
@@ -131,7 +139,27 @@ describe Cart do
         @cart.coupons.size.should == 0
       end
     end
-    
+    context "with bonusarticle" do
+      before do
+        @item = Item.make
+        @coupon = Coupon.make(:bonus_article => @item)
+        @coupon2 = Coupon.make()
+        @cart.coupon_code = @coupon.code
+        @cart.save
+        @cart.coupon_code = @coupon2.code
+        @cart.save
+      end
+
+      it "should contain the bonus item" do
+        @cart.bonus_items.should include @item
+      end
+
+      it "should not contain nil articles in bonus articles" do
+        @cart.coupons.size.should == 2
+        @cart.bonus_items.size.should == 1
+      end
+    end
+
     context "with mutiple articles" do
       before(:each) do
         @article3 = Item.make(:price => 30.3)

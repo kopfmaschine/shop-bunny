@@ -15,7 +15,11 @@ module ShopBunny
     def items
       self.cart_items
     end
-    
+
+    def bonus_items
+      coupons.map(&:bonus_article).compact
+    end
+
     def item_count
       self.cart_items.inject(0) {|sum,e| sum += e.quantity}
     end
@@ -110,7 +114,7 @@ module ShopBunny
     
     # Check if the cart is empty
     def empty?
-      cart_items.empty?
+      cart_items.empty? && bonus_items.empty?
     end
     
     # Remove all items from the cart

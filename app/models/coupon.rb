@@ -2,6 +2,7 @@ class Coupon < ActiveRecord::Base
   InvalidEvent = Class.new(NoMethodError)
   has_many :coupon_uses, :dependent => :destroy
   has_many :carts, :through => :coupon_uses
+  belongs_to :bonus_article, :class_name => ShopBunny.item_model_class_name
 
   validates_presence_of :code
   validates_uniqueness_of :code
