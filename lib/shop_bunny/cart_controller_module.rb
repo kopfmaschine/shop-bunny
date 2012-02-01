@@ -8,8 +8,8 @@ module ShopBunny
 
     def show
       respond_with @cart
-    end  
-    
+    end
+
     def add_item
       if !params[:quantity].blank?
         quantity = params[:quantity].to_i
@@ -21,29 +21,33 @@ module ShopBunny
         format.html { redirect_to cart_path }
       end
     end
-    
+
     def remove_item
       @cart.remove_item(@item) if @item
       respond_with @cart do |format|
         format.html { redirect_to cart_path }
       end
     end
-    
+
     def update
       @cart.update_attributes(params[:cart])
       respond_with @cart do |format|
         format.html { 
           if @cart.errors.empty?
-            redirect_to cart_path
-          else
-            render :show
-          end
+            redirect_to after_update_path
+        else
+          render :show
+        end
         }
       end
     end
-    
+
     private
-    
+
+    def after_update_path
+      cart_path
+    end
+
     def find_item
       @item = @cart.item_model.find(params[:item_id])
     end
