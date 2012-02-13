@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.homepage = "http://kopfmaschine.com"
   s.summary = "A shop template for your needs"
   s.description = "A simple shop gem that integrates a cart and coupons functionality"
-  s.add_dependency "rails", "~> 3.1.3"
+  s.add_dependency "rails", ">= 3.1.3"
 
   s.required_rubygems_version = ">= 1.3.6"
   s.has_rdoc = true
