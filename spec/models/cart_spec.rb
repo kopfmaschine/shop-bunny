@@ -131,9 +131,9 @@ describe Cart do
       end
 
       it "with max_uses=1 via coupon_code= should not invalidate the cart" do
-        coupon = Coupon.make(:max_uses => 1)
+        coupon = Coupon.make(:max_uses => 1, :state => "active")
         @cart.coupon_code = coupon.code
-        @cart.save!
+        @cart.save
         @cart.should be_valid
       end
 

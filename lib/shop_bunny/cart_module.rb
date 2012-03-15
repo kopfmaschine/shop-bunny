@@ -5,9 +5,10 @@ module ShopBunny
       clazz.send(:attr_accessor, :coupon_code)
       clazz.send(:has_many, :cart_items, :dependent => :destroy, :class_name => 'ShopBunny::CartItem')
       clazz.send(:has_many, :coupon_uses, :dependent => :destroy, :class_name => 'ShopBunny::CouponUse')
-      clazz.send(:has_many, :coupons, :through => :coupon_uses, :uniq => true)
+      clazz.send(:has_many, :coupons, :through => :coupon_uses)
       clazz.send(:accepts_nested_attributes_for, :cart_items, :allow_destroy => true )
       clazz.send(:before_save, :update_coupons)
+      clazz.send(:after_save, :free_coupon_code)
       clazz.send(:attr_accessible, :coupon_code, :cart_items_attributes)
       clazz.send(:validate, :coupon_code_must_be_valid)
     end
@@ -23,7 +24,7 @@ module ShopBunny
     def item_count
       self.cart_items.inject(0) {|sum,e| sum += e.quantity}
     end
-    
+
     def shipping_costs(options = {})
       return 0 if coupons.any?(&:removes_shipping_cost)
       shipping_cost_calculator.costs_for(self, options)
@@ -138,8 +139,13 @@ module ShopBunny
     def update_coupons
       Array(@coupon_code).each { |code|
         coupon = Coupon.find_by_code(code)
+        return if coupons.include? coupon
         coupons << coupon if coupon && coupon.redeemable?
       }
+    end
+
+    def free_coupon_code
+      self.coupon_code = nil
     end
     
     def coupon_code_must_be_valid
@@ -151,6 +157,10 @@ module ShopBunny
           errors.add(:coupon_code, :expired)
         elsif coupon.used_up? && !coupons.include?(coupon)
           errors.add(:coupon_code, :used_up)
+        elsif !coupon.redeemable?
+          errors.add(:coupon_code, :not_redeemable)
+        elsif coupons.map(&:code).include? coupon.code
+          errors.add(:coupon_code, :already_added)
         end
       }
     end
