@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111130123434) do
+ActiveRecord::Schema.define(:version => 20120315145137) do
 
   create_table "cart_items", :force => true do |t|
     t.integer  "cart_id"
@@ -33,6 +33,8 @@ ActiveRecord::Schema.define(:version => 20111130123434) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "coupon_uses", ["cart_id", "coupon_id"], :name => "index_coupon_uses_on_cart_id_and_coupon_id", :unique => true
 
   create_table "coupons", :force => true do |t|
     t.boolean  "removes_tax",            :default => false
