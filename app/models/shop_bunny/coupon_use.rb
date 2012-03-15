@@ -4,4 +4,5 @@ class ShopBunny::CouponUse < ActiveRecord::Base
 
   validates_presence_of :cart_id
   validates_presence_of :coupon_id
+  validates_uniqueness_of :coupon_id, :scope => :cart_id
 end

@@ -51,21 +51,18 @@ describe Cart do
     end
 
     describe "adding coupons using #coupons<<" do
-      it "adds a coupon though CouponUse" do
+      it "adds a coupon" do
         coupon = Coupon.make
-        add_a_coupon = lambda {
+        expect {
           @cart.coupons << coupon
-        }
-        add_a_coupon.should change { @cart.coupons.count }.by(1)
-        add_a_coupon.should change { CouponUse.count }.by(1)
+        }.to change { @cart.coupons.count }.by(1)
       end
 
-      it "adds a Coupon only once" do
+      it "creates a CouponUse" do
         coupon = Coupon.make
-        lambda {
+        expect {
           @cart.coupons << coupon
-          @cart.coupons << coupon
-        }.should change { @cart.coupons.count }.by(1)
+        }.to change { CouponUse.count }.by(1)
       end
     end
 
@@ -155,19 +152,12 @@ describe Cart do
         @cart.coupons.should be_empty
         @cart.save
         @cart.reload
-        
         @cart.coupons.should include coupon
         @cart.coupons.size.should == 1
-        
-        @cart.coupon_code = ""
-        @cart.save
-        @cart.reload
-        
-        @cart.coupons.size.should == 1
+
         @cart.coupon_code = coupon.code
         @cart.save
         @cart.reload
-
         @cart.coupons.size.should == 1
       end
 
@@ -182,6 +172,7 @@ describe Cart do
         @cart.coupons.size.should == 0
       end
     end
+
     context "with bonusarticle" do
       before do
         @item = Item.make
