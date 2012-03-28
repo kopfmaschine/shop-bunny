@@ -15,8 +15,6 @@ module ShopBunny
     end
 
     def create_migrations
-      puts "BAA"
-      p self.class.source_root
       Dir["#{self.class.source_root}/../../../../../db/migrate/*.rb"].sort.each do |filepath|
         p filepath
         name = File.basename(filepath)
