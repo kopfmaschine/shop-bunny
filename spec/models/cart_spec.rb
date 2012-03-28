@@ -144,25 +144,26 @@ describe Cart do
         end
 
         it "should not be possible when item sum is below MOV" do
-          @cart.stubs(:item_sum).returns(1)
+          Cart.any_instance.stubs(:item_sum).returns(1)
           @cart.coupon_code = @coupon.code
           @cart.save
           @cart.coupons.should_not include @coupon
         end
 
         it "should be possible when achieved" do
-          @cart.stubs(:item_sum).returns(100)
+          # FIXME don't be so generous
+          Cart.any_instance.stubs(:item_sum).returns(100)
           @cart.coupon_code = @coupon.code
           @cart.save
           @cart.coupons.should include @coupon
         end
 
         it "should should invalidate the cart if the MOV ist not reached" do
-          @cart.stubs(:item_sum).returns(100)
+          Cart.any_instance.stubs(:item_sum).returns(100)
           @cart.coupon_code = @coupon.code
           @cart.save
           @cart.should be_valid
-          @cart.stubs(:item_sum).returns(1)
+          Cart.any_instance.stubs(:item_sum).returns(1)
           @cart.should_not be_valid
         end
       end

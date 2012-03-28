@@ -11,7 +11,7 @@ module ShopBunny
       clazz.send(:after_save, :free_coupon_code)
       clazz.send(:attr_accessible, :coupon_code, :cart_items_attributes)
       clazz.send(:validate, :coupon_code_must_be_valid)
-      clazz.send(:validate, :coupon_mov_must_be_achieved)
+      clazz.send(:validates_associated, :coupon_uses)
     end
   
     def items
@@ -164,12 +164,6 @@ module ShopBunny
           errors.add(:coupon_code, :already_added)
         end
       }
-    end
-
-    def coupon_mov_must_be_achieved
-      coupons.each do |coupon|
-        errors.add(:base, :coupon_mov) unless coupon.valid_for?(self)
-      end
     end
   end
 end
