@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120315145137) do
+ActiveRecord::Schema.define(:version => 20120315160102) do
 
   create_table "cart_items", :force => true do |t|
     t.integer  "cart_id"
@@ -51,6 +51,7 @@ ActiveRecord::Schema.define(:version => 20120315145137) do
     t.float    "value_of_automatic_add"
     t.integer  "max_uses"
     t.string   "state"
+    t.float    "minimum_order_value"
   end
 
   create_table "items", :force => true do |t|

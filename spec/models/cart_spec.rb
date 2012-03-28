@@ -118,7 +118,7 @@ describe Cart do
     context "adding coupons with #coupon_code=" do
       it "should show an error when adding an incorrect coupon code" do
         @cart.coupon_code = "incorrectcode"
-        @cart.should_not be_valid        
+        @cart.should_not be_valid
         @cart.errors[:coupon_code].should_not be_nil
       end
 
@@ -134,7 +134,37 @@ describe Cart do
         coupon = Coupon.make(:max_uses => 1, :state => "active")
         @cart.coupon_code = coupon.code
         @cart.save
+        @cart.valid?
         @cart.should be_valid
+      end
+
+      context "with a miminum order value coupon" do
+        before do
+          @coupon = Coupon.make(:minimum_order_value => 50)
+        end
+
+        it "should not be possible when item sum is below MOV" do
+          @cart.stubs(:item_sum).returns(1)
+          @cart.coupon_code = @coupon.code
+          @cart.save
+          @cart.coupons.should_not include @coupon
+        end
+
+        it "should be possible when achieved" do
+          @cart.stubs(:item_sum).returns(100)
+          @cart.coupon_code = @coupon.code
+          @cart.save
+          @cart.coupons.should include @coupon
+        end
+
+        it "should should invalidate the cart if the MOV ist not reached" do
+          @cart.stubs(:item_sum).returns(100)
+          @cart.coupon_code = @coupon.code
+          @cart.save
+          @cart.should be_valid
+          @cart.stubs(:item_sum).returns(1)
+          @cart.should_not be_valid
+        end
       end
 
       it "should create coupon_uses" do

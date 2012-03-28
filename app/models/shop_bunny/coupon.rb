@@ -44,4 +44,9 @@ class ShopBunny::Coupon < ActiveRecord::Base
     self.state = 'redeemed'
     save!
   end
+
+  #check ifthe cart's sum exceeds the MOV
+  def valid_for?(cart)
+    minimum_order_value.nil? || minimum_order_value < cart.item_sum
+  end
 end
