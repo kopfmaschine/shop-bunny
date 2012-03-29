@@ -32,12 +32,12 @@ module ShopBunny
     def update
       @cart.update_attributes(params[:cart])
       respond_with @cart do |format|
-        format.html { 
-          if @cart.errors.empty?
+        format.html {
+          if @cart.valid?
             redirect_to after_update_path
-        else
-          render :show
-        end
+          else
+            render :show
+          end
         }
       end
     end

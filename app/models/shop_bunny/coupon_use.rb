@@ -9,6 +9,6 @@ class ShopBunny::CouponUse < ActiveRecord::Base
 
   protected
   def minimum_order_value_reached
-    errors.add(:base, :minimun_order_value) unless coupon.valid_for?(cart)
+    errors.add(:base, :minimum_order_value) unless coupon.valid_for?(cart)
   end
 end
