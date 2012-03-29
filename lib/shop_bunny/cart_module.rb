@@ -141,7 +141,7 @@ module ShopBunny
       Array(@coupon_code).each { |code|
         coupon = Coupon.find_by_code(code)
         return if coupons.include? coupon
-        coupons << coupon if coupon && coupon.redeemable? && coupon.valid_for?(self)
+        coupons << coupon if coupon && coupon.redeemable?
       }
     end
 
